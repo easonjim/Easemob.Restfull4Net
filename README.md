@@ -1,5 +1,6 @@
 # Easemob.Restfull4Net
 环信Restfull API dotnet的封装  
+支持的.Net Framework版本：4.0
 API地址：[http://http://docs.easemob.com/start/100serverintegration](http://http://docs.easemob.com/start/100serverintegration)  
 
 #### 一、SDK的使用说明:   
