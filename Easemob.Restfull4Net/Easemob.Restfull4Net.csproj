@@ -1,0 +1,106 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{2F757799-E6C0-429B-B810-2CF97D047FA3}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Easemob.Restfull4Net</RootNamespace>
+    <AssemblyName>Easemob.Restfull4Net</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\Easemob.Restfull4Net.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Client.cs" />
+    <Compile Include="Common\ContentType.cs" />
+    <Compile Include="Common\ContentTypeExtensions.cs" />
+    <Compile Include="Common\ContentTypeMetadata.cs" />
+    <Compile Include="Common\HttpMethod.cs" />
+    <Compile Include="Config\Configuration\ServerConfigElement.cs" />
+    <Compile Include="Config\Configuration\ServerConfigElementCollection.cs" />
+    <Compile Include="Config\Configuration\ServerConfigSection.cs" />
+    <Compile Include="Config\CustomServerConfig.cs" />
+    <Compile Include="Config\IServerConfig.cs" />
+    <Compile Include="Config\ServerConfig.cs" />
+    <Compile Include="Entity\Request\User\UserCreateReqeust.cs" />
+    <Compile Include="Entity\Request\Token\TokenRequest.cs" />
+    <Compile Include="Entity\Request\User\UserBlockAddRequest.cs" />
+    <Compile Include="Entity\Request\User\UserBlockDeleteRequest.cs" />
+    <Compile Include="Entity\Request\User\UserFriendDeleteRequest.cs" />
+    <Compile Include="Entity\Request\User\UserFriendAddRequest.cs" />
+    <Compile Include="Entity\Request\User\UserOfflineMsgStatusGetRequest.cs" />
+    <Compile Include="Entity\Request\User\UserPasswordRestRequest.cs" />
+    <Compile Include="Entity\Request\User\UserNickNameRestRequest.cs" />
+    <Compile Include="Entity\Response\Base\BaseResponse.cs" />
+    <Compile Include="Entity\Response\ChatFile\ChatFileResponse.cs" />
+    <Compile Include="Entity\Response\Base\ErrorResponse.cs" />
+    <Compile Include="Entity\Response\ChatMsg\ChatMsgResponse.cs" />
+    <Compile Include="Entity\Request\Msg\MsgRequest.cs" />
+    <Compile Include="Entity\Response\Msg\MsgResponse.cs" />
+    <Compile Include="Entity\Response\Token\TokenResponse.cs" />
+    <Compile Include="Entity\Response\User\UserFriendResponse.cs" />
+    <Compile Include="Entity\Response\User\UserResponse.cs" />
+    <Compile Include="Helper\CacheHelper.cs" />
+    <Compile Include="Helper\ConfigHelper.cs" />
+    <Compile Include="Helper\ConvertHelper.cs" />
+    <Compile Include="Helper\DateTimeHelper.cs" />
+    <Compile Include="Helper\FileHelper.cs" />
+    <Compile Include="Helper\ObjectJsonHelper.cs" />
+    <Compile Include="Helper\LogTraceHelper.cs" />
+    <Compile Include="Helper\ObjectToDictionaryHelper.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Request\AsyncRequest.cs" />
+    <Compile Include="Request\BaseRequest.cs" />
+    <Compile Include="Request\SyncRequest.cs" />
+    <Compile Include="Utility\HttpUtility\Get.cs" />
+    <Compile Include="Utility\HttpUtility\Delete.cs" />
+    <Compile Include="Utility\HttpUtility\Put.cs" />
+    <Compile Include="Utility\HttpUtility\Post.cs" />
+    <Compile Include="Utility\HttpUtility\RequestUtility.cs" />
+    <Compile Include="Utility\HttpUtility\SerializerUtility.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config.example" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
