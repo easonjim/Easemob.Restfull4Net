@@ -1,0 +1,59 @@
+<project name="Easemob.Restfull4Net" default="Easemob.Restfull4Net_BuildOut_Debug" basedir="." xmlns="http://nant.sf.net/schemas/nant.xsd">
+  <property name="Easemob.Restfull4Net_Dll_FileName" value="Easemob.Restfull4Net.dll" />
+  <property name="Easemob.Restfull4Net_Pdb_FileName" value="Easemob.Restfull4Net.pdb" />
+  <property name="Easemob.Restfull4Net_Xml_FileName" value="Easemob.Restfull4Net.xml" />
+  <property name="Easemob.Restfull4Net.Test_Dll_FileName" value="Easemob.Restfull4Net.Test.dll" />
+  <property name="Easemob.Restfull4Net.Test_Dll_Config_FileName" value="Easemob.Restfull4Net.Test.dll.config" />
+  <property name="Easemob.Restfull4Net.Test_Appconfig_FileName" value="App.config" />
+  <property name="BuildOut_Debug_4.0_Dir" value="BuildOut\Debug\4.0" />
+  <property name="BuildOut_Debug_4.0_Dll_FilePath" value="${BuildOut_Debug_4.0_Dir}\${Easemob.Restfull4Net_Dll_FileName}" />
+  <property name="BuildOut_Debug_4.0_Pdb_FilePath" value="${BuildOut_Debug_4.0_Dir}\${Easemob.Restfull4Net_Pdb_FileName}" />
+  <property name="BuildOut_Debug_4.0_Xml_FilePath" value="${BuildOut_Debug_4.0_Dir}\${Easemob.Restfull4Net_Xml_FileName}" />
+  <property name="BuildOut_Release_4.0_Dir" value="BuildOut\Release\4.0" />
+  <property name="BuildOut_Release_4.0_Dll_FilePath" value="${BuildOut_Release_4.0_Dir}\${Easemob.Restfull4Net_Dll_FileName}" />
+  <property name="BuildOut_Release_4.0_Pdb_FilePath" value="${BuildOut_Release_4.0_Dir}\${Easemob.Restfull4Net_Pdb_FileName}" />
+  <property name="BuildOut_Release_4.0_Xml_FilePath" value="${BuildOut_Release_4.0_Dir}\${Easemob.Restfull4Net_Xml_FileName}" />
+  <property name="BuildOut_Test_4.0_Dir" value="BuildOut\Test\4.0" />
+  <property name="BuildOut_Test_4.0_Dll_FilePath" value="${BuildOut_Test_4.0_Dir}\${Easemob.Restfull4Net.Test_Dll_FileName}" />
+  <property name="BuildOut_Test_4.0_Dll_Config_FilePath" value="${BuildOut_Test_4.0_Dir}\${Easemob.Restfull4Net.Test_Dll_Config_FileName}" />
+  <property name="Devenv_Dir" value="C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE" />
+  <property name="MSTest_Dir" value="${Devenv_Dir}\ReferenceAssemblies\v4.0\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll" />
+  <property name="Easemob.Restfull4Net_Dir" value="Easemob.Restfull4Net" />
+  <property name="Easemob.Restfull4Net.Test_Dir" value="Easemob.Restfull4Net.Test" />
+  <property name="Easemob.Restfull4Net.Test_Appconfig_FilePath" value="${Easemob.Restfull4Net.Test_Dir}\${Easemob.Restfull4Net.Test_Appconfig_FileName}" />
+  <target name="Easemob.Restfull4Net_BuildOut_Debug">
+    <mkdir dir="${BuildOut_Debug_4.0_Dir}" />
+    <csc target="library" output="${BuildOut_Debug_4.0_Dll_FilePath}" doc="${BuildOut_Debug_4.0_Xml_FilePath}" filealign="512" debug="true" optimize="true" warninglevel="4" define="TRACE" rebuild="true" platform="AnyCPU">
+      <sources>
+        <include name="${Easemob.Restfull4Net_Dir}\**\*.cs" />
+      </sources>
+    </csc>
+  </target>
+  <target name="Easemob.Restfull4Net_BuildOut_Release">
+    <mkdir dir="${BuildOut_Release_4.0_Dir}" />
+    <csc target="library" output="${BuildOut_Release_4.0_Dll_FilePath}" doc="${BuildOut_Release_4.0_Xml_FilePath}" filealign="512" debug="false" optimize="true" warninglevel="4" define="TRACE" rebuild="true" platform="AnyCPU">
+      <sources>
+        <include name="${Easemob.Restfull4Net_Dir}\**\*.cs" />
+      </sources>
+    </csc>
+  </target>
+  <target name="Easemob.Restfull4Net.Test_BuildOut" depends="Easemob.Restfull4Net_BuildOut_Debug">
+    <mkdir dir="${BuildOut_Test_4.0_Dir}" />
+    <csc target="library" output="${BuildOut_Test_4.0_Dll_FilePath}" filealign="512" debug="true" optimize="true" warninglevel="4" define="TRACE" rebuild="true" platform="AnyCPU">
+      <sources>
+        <include name="${Easemob.Restfull4Net.Test_Dir}\**\*.cs" />
+      </sources>
+      <references>
+        <include name="${MSTest_Dir}" />
+        <include name="${BuildOut_Debug_4.0_Dll_FilePath}" />
+      </references>
+    </csc>
+    <copy file="${BuildOut_Debug_4.0_Dll_FilePath}" todir="${BuildOut_Test_4.0_Dir}" />
+    <copy file="${BuildOut_Debug_4.0_Xml_FilePath}" todir="${BuildOut_Test_4.0_Dir}" />
+    <copy file="${BuildOut_Debug_4.0_Pdb_FilePath}" todir="${BuildOut_Test_4.0_Dir}" />
+    <copy file="${Easemob.Restfull4Net.Test_Appconfig_FilePath}" tofile="${BuildOut_Test_4.0_Dll_Config_FilePath}" />
+  </target>
+  <target name="Easemob.Restfull4Net.Test_Test">
+    <exec program="MSTest.exe" commandline="/testcontainer:${BuildOut_Test_4.0_Dll_FilePath}" basedir="${Devenv_Dir}" failonerror="true" />
+  </target>
+</project>

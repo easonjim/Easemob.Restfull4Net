@@ -1,12 +1,12 @@
 # Easemob.Restfull4Net
 环信Restfull API dotnet的封装  
 支持的.Net Framework版本：4.0   
-API地址：[http://http://docs.easemob.com/start/100serverintegration](http://http://docs.easemob.com/start/100serverintegration)  
+环信Restfull API地址：[http://docs.easemob.com/start/100serverintegration](http://docs.easemob.com/start/100serverintegration)  
 
 #### 一、SDK的使用说明:   
 采用配置节点的形势来设置环信，且一次可以支持多个app进行调用，在数据处理上，全部采用强类型实体进行包装，异常处理全部数据错误日志，方便查询。  
 #####以下为配置节点的使用方法：  
-1、采用Section的形势配置app，这种方式有个好处，可以连续配置多个app。  
+1、采用Section的形式配置app，这种方式有个好处，可以连续配置多个app。  
 ```
 <configSections>
   <section name="EasemobServer" type="Easemob.Restfull4Net.Config.Configuration.ServerConfigSection,Easemob.Restfull4Net"/>
@@ -94,13 +94,27 @@ Assert.AreEqual(user.StatusCode, HttpStatusCode.OK);
 ```
 其中SyncRequests中的key就是你在环信的appname。
 ####二、目前SDK的封装进度：   
+#####同步请求：  
 【完成】用户体系集成  
 【完成】聊天记录  
 【完成】文件上传下载  
 【完成】发送消息  
 【未完成】群组管理  
 【未完成】聊天室管理  
-以上为目前的开发进度，且上面完成的功能都已经投入使用，后续将完成剩下的api封装  
-目前整个SDK都是使用同步请求进行，还未加入异步请求，后续也将集成进去。   
+#####异步请求：
+【未开始】
+（备注：以上为目前的开发进度，且上面完成的功能都已经投入使用，后续将完成剩下的api封装；目前整个SDK都是使用同步请求进行，还未加入异步请求，后续也将集成进去。）  
+####三、版本更新历史  
++++++++++++++++++++++++++++  
+version：1.0.1  data：2016-08-22  
+1.修改单元测试项目，其中测试的图片上传采用网络图片  
+2.加入NAnt进行持续集成，如果要采用NAnt进行build，需要确定本机安装啦NAnt工具，且由于项目中的单元测试项目使用的是MSTest，所以要确保编译的机器上已经安装此组件；NAnt.build文件中有设置依赖组件的组件，打开编辑成所在编译机器路径即可  
++++++++++++++++++++++++++++  
+  
++++++++++++++++++++++++++++  
+version：1.0.0  data：2016-08-10  
+初始版本发布  
+完成同步请求的“用户体系集成”，“聊天记录”，“文件上传下载”，“发送消息”  
++++++++++++++++++++++++++++  
 ####License
 Easemob.Restfull4Net is licensed under the MIT License.

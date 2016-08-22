@@ -2,8 +2,10 @@
 using System.Drawing.Imaging;
 using System.IO;
 using System.Net;
+using Easemob.Restfull4Net.Common;
 using Easemob.Restfull4Net.Entity.Request;
 using Easemob.Restfull4Net.Helper;
+using Easemob.Restfull4Net.Utility.HttpUtility;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Easemob.Restfull4Net.Test
@@ -11,13 +13,36 @@ namespace Easemob.Restfull4Net.Test
     [TestClass]
     public class ChatFileTest
     {
+        #region 下载临时文件
+        
+        private string DownloadImage()
+        {
+            string imgUrl = "http://www.baidu.com/img/baidu_sylogo1.gif";
+            string fileName = string.Concat(DateTime.Now.ToString("yyyyMMddHHmmssffff"), ".gif");
+            using (var input = new MemoryStream())
+            {
+                Get.FillDownload(imgUrl, input, true, null, null, ContentType.DEFAULT);
+                using (System.Drawing.Image img = System.Drawing.Image.FromStream(input))
+                {
+                    using (var output = new MemoryStream())
+                    {
+                        img.Save(fileName, ImageFormat.Gif);
+                    }
+                }
+            }
+            return fileName;
+        }
+
+        #endregion
+
         #region 上传语音/图片文件
 
         [TestMethod]
         public void UploadFileTest()
         {
+            string fileName = DownloadImage();
             //上传语音/图片文件
-            var result = Client.DefaultSyncRequest.ChatFileUpload(FileHelper.GetFileInfo("9a4d7c1710652ab80ef2c8e249bd0b55.jpg").FullName,30000);
+            var result = Client.DefaultSyncRequest.ChatFileUpload(FileHelper.GetFileInfo(fileName).FullName, 30000);
             Assert.AreEqual(result.StatusCode,HttpStatusCode.OK);
         }
         
@@ -28,8 +53,9 @@ namespace Easemob.Restfull4Net.Test
         [TestMethod]
         public void DownloadFileTest()
         {
+            string fileName = DownloadImage();
             //上传语音/图片文件
-            var result = Client.DefaultSyncRequest.ChatFileUpload(FileHelper.GetFileInfo("9a4d7c1710652ab80ef2c8e249bd0b55.jpg").FullName,30000);
+            var result = Client.DefaultSyncRequest.ChatFileUpload(FileHelper.GetFileInfo(fileName).FullName, 30000);
             Assert.AreEqual(result.StatusCode,HttpStatusCode.OK);
             if (result.StatusCode==HttpStatusCode.OK)
             {
@@ -42,7 +68,7 @@ namespace Easemob.Restfull4Net.Test
                     {
                         using (var output = new MemoryStream())
                         {
-                            img.Save(string.Concat(DateTime.Now.ToString("yyyyMMddHHmmssffff"),".jpg"), ImageFormat.Jpeg);
+                            img.Save(string.Concat(DateTime.Now.ToString("yyyyMMddHHmmssffff"),".gif"), ImageFormat.Gif);
                         }
                     }
                 }
@@ -56,8 +82,9 @@ namespace Easemob.Restfull4Net.Test
         [TestMethod]
         public void DownloadThumbnailTest()
         {
+            string fileName = DownloadImage();
             //上传语音/图片文件
-            var result = Client.DefaultSyncRequest.ChatFileUpload(FileHelper.GetFileInfo("9a4d7c1710652ab80ef2c8e249bd0b55.jpg").FullName,30000);
+            var result = Client.DefaultSyncRequest.ChatFileUpload(FileHelper.GetFileInfo(fileName).FullName, 30000);
             Assert.AreEqual(result.StatusCode,HttpStatusCode.OK);
             if (result.StatusCode==HttpStatusCode.OK)
             {
@@ -70,7 +97,7 @@ namespace Easemob.Restfull4Net.Test
                     {
                         using (var output = new MemoryStream())
                         {
-                            img.Save(string.Concat(DateTime.Now.ToString("yyyyMMddHHmmssffff"),"thumbnail",".jpg"), ImageFormat.Jpeg);
+                            img.Save(string.Concat(DateTime.Now.ToString("yyyyMMddHHmmssffff"),"thumbnail",".gif"), ImageFormat.Gif);
                         }
                     }
                 }

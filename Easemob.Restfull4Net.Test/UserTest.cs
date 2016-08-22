@@ -32,9 +32,9 @@ namespace Easemob.Restfull4Net.Test
             //单个创建
             var user = Client.DefaultSyncRequest.UserCreate(new UserCreateReqeust()
             {
-                nickname = string.Concat("Test", this._userName, "3"),
+                nickname = string.Concat("Test", this._userName),
                 password = "123456",
-                username = string.Concat("Test", this._userName, "3"),
+                username = string.Concat("Test", this._userName),
             });
             Assert.AreEqual(user.StatusCode, HttpStatusCode.OK);
         }
@@ -47,15 +47,15 @@ namespace Easemob.Restfull4Net.Test
             {
                 new UserCreateReqeust()
                 {
-                    nickname = string.Concat("Test", this._userName,"1"),
+                    nickname = string.Concat("Test", this._userName),
                     password = "123456",
-                    username = string.Concat("Test", this._userName,"1"),
+                    username = string.Concat("Test", this._userName),
                 },
                 new UserCreateReqeust()
                 {
-                    nickname = string.Concat("Test", this._userName,"2"),
+                    nickname = string.Concat("Test", this._userName),
                     password = "123456",
-                    username = string.Concat("Test", this._userName,"2"),
+                    username = string.Concat("Test", this._userName),
                 }
             });
             Assert.AreEqual(user.StatusCode, HttpStatusCode.OK);
@@ -68,9 +68,9 @@ namespace Easemob.Restfull4Net.Test
             //先创建一个临时用户
             var user = Client.DefaultSyncRequest.UserCreate(new UserCreateReqeust()
             {
-                nickname = string.Concat("Test", this._userName, "3"),
+                nickname = string.Concat("Test", this._userName),
                 password = "123456",
-                username = string.Concat("Test", this._userName, "3"),
+                username = string.Concat("Test", this._userName),
             });
             var user1 = Client.DefaultSyncRequest.UserGet(user.entities[0].username);
             Assert.IsTrue(user1.StatusCode == HttpStatusCode.OK);
@@ -91,9 +91,9 @@ namespace Easemob.Restfull4Net.Test
             //先创建一个临时用户
             var user = Client.DefaultSyncRequest.UserCreate(new UserCreateReqeust()
             {
-                nickname = string.Concat("Test", this._userName, "3"),
+                nickname = string.Concat("Test", this._userName),
                 password = "123456",
-                username = string.Concat("Test", this._userName, "3"),
+                username = string.Concat("Test", this._userName),
             });
             Assert.AreEqual(user.StatusCode, HttpStatusCode.OK);
             //再进行删除
@@ -111,9 +111,9 @@ namespace Easemob.Restfull4Net.Test
             //先创建一个临时用户
             var user = Client.DefaultSyncRequest.UserCreate(new UserCreateReqeust()
             {
-                nickname = string.Concat("Test", this._userName, "3"),
+                nickname = string.Concat("Test", this._userName),
                 password = "123456",
-                username = string.Concat("Test", this._userName, "3"),
+                username = string.Concat("Test", this._userName),
             });
             Assert.AreEqual(user.StatusCode, HttpStatusCode.OK);
             //再进行删除
@@ -131,9 +131,9 @@ namespace Easemob.Restfull4Net.Test
             //先创建一个临时用户
             var user = Client.DefaultSyncRequest.UserCreate(new UserCreateReqeust()
             {
-                nickname = string.Concat("Test", this._userName, "3"),
+                nickname = string.Concat("Test", this._userName),
                 password = "123456",
-                username = string.Concat("Test", this._userName, "3"),
+                username = string.Concat("Test", this._userName),
             });
             Assert.AreEqual(user.StatusCode, HttpStatusCode.OK);
 
@@ -151,9 +151,9 @@ namespace Easemob.Restfull4Net.Test
             //先创建一个临时用户
             var user = Client.DefaultSyncRequest.UserCreate(new UserCreateReqeust()
             {
-                nickname = string.Concat("Test", this._userName, "3"),
+                nickname = string.Concat("Test", this._userName),
                 password = "123456",
-                username = string.Concat("Test", this._userName, "3"),
+                username = string.Concat("Test", this._userName),
             });
             Assert.AreEqual(user.StatusCode, HttpStatusCode.OK);
 
@@ -364,9 +364,9 @@ namespace Easemob.Restfull4Net.Test
             //单个创建
             var user = Client.DefaultSyncRequest.UserCreate(new UserCreateReqeust()
             {
-                nickname = string.Concat("Test", this._userName, "3"),
+                nickname = string.Concat("Test", this._userName),
                 password = "123456",
-                username = string.Concat("Test", this._userName, "3"),
+                username = string.Concat("Test", this._userName),
             });
             Assert.AreEqual(user.StatusCode, HttpStatusCode.OK);
             if (user.StatusCode == HttpStatusCode.OK)
@@ -383,9 +383,9 @@ namespace Easemob.Restfull4Net.Test
             //单个创建
             var user = Client.DefaultSyncRequest.UserCreate(new UserCreateReqeust()
             {
-                nickname = string.Concat("Test", this._userName, "3"),
+                nickname = string.Concat("Test", this._userName),
                 password = "123456",
-                username = string.Concat("Test", this._userName, "3"),
+                username = string.Concat("Test", this._userName),
             });
             Assert.AreEqual(user.StatusCode, HttpStatusCode.OK);
             if (user.StatusCode == HttpStatusCode.OK)
@@ -416,9 +416,9 @@ namespace Easemob.Restfull4Net.Test
             //单个创建
             var user = Client.DefaultSyncRequest.UserCreate(new UserCreateReqeust()
             {
-                nickname = string.Concat("Test", this._userName, "3"),
+                nickname = string.Concat("Test", this._userName),
                 password = "123456",
-                username = string.Concat("Test", this._userName, "3"),
+                username = string.Concat("Test", this._userName),
             });
             //发送消息
             var send = Client.DefaultSyncRequest.MsgSend<MsgText>(new MsgRequest<MsgText>()
@@ -460,9 +460,9 @@ namespace Easemob.Restfull4Net.Test
             //单个创建
             var user = Client.DefaultSyncRequest.UserCreate(new UserCreateReqeust()
             {
-                nickname = string.Concat("Test", this._userName, "3"),
+                nickname = string.Concat("Test", this._userName),
                 password = "123456",
-                username = string.Concat("Test", this._userName, "3"),
+                username = string.Concat("Test", this._userName),
             });
 
             var status = Client.DefaultSyncRequest.UserSetDeactivate(user.entities[0].username);
@@ -477,9 +477,9 @@ namespace Easemob.Restfull4Net.Test
             //单个创建
             var user = Client.DefaultSyncRequest.UserCreate(new UserCreateReqeust()
             {
-                nickname = string.Concat("Test", this._userName, "3"),
+                nickname = string.Concat("Test", this._userName),
                 password = "123456",
-                username = string.Concat("Test", this._userName, "3"),
+                username = string.Concat("Test", this._userName),
             });
 
             var status = Client.DefaultSyncRequest.UserSetActivate(user.entities[0].username);
@@ -498,9 +498,9 @@ namespace Easemob.Restfull4Net.Test
             //单个创建
             var user = Client.DefaultSyncRequest.UserCreate(new UserCreateReqeust()
             {
-                nickname = string.Concat("Test", this._userName, "3"),
+                nickname = string.Concat("Test", this._userName),
                 password = "123456",
-                username = string.Concat("Test", this._userName, "3"),
+                username = string.Concat("Test", this._userName),
             });
 
             var status = Client.DefaultSyncRequest.UserSetDeactivate(user.entities[0].username);
