@@ -4,7 +4,7 @@
 环信Restfull API地址：[http://docs.easemob.com/start/100serverintegration](http://docs.easemob.com/start/100serverintegration)  
 
 #### 一、SDK的使用说明:   
-采用配置节点的形势来设置环信，且一次可以支持多个app进行调用，在数据处理上，全部采用强类型实体进行包装，异常处理全部数据错误日志，方便查询。  
+采用配置节点的形式来设置环信，且一次可以支持多个app进行调用，在数据处理上，全部采用强类型实体进行包装，异常处理全部数据错误日志，方便查询。  
 #####以下为配置节点的使用方法：  
 1、采用Section的形式配置app，这种方式有个好处，可以连续配置多个app。  
 ```
@@ -56,7 +56,7 @@
 <add key="HX_EaseIsDebug" value="true"/><!--是否为调试模式，说明：如果为调试模式，将在程序主目录输出日志文件-->
 <add key="HX_EaseMaxJsonLength" value="0"/><!--JavaScriptSerializer类接受的JSON字符串的最大长度-->
 ```
-3、使用代码的硬编码形势启动app。
+3、使用代码的硬编码形式启动app。
 ```
 //自定义实例化
 var syncRequest = new SyncRequest(new ServerConfig()
