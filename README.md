@@ -116,5 +116,10 @@ version：1.0.0  data：2016-08-10
 初始版本发布  
 完成同步请求的“用户体系集成”，“聊天记录”，“文件上传下载”，“发送消息”  
 +++++++++++++++++++++++++++  
+####四、项目相关地址  
+源码：[https://github.com/easonjim/Easemob.Restfull4Net](https://github.com/easonjim/Easemob.Restfull4Net)  
+bug提交：[https://github.com/easonjim/Easemob.Restfull4Net/issues](https://github.com/easonjim/Easemob.Restfull4Net/issues)  
+Release版本：[https://github.com/easonjim/Easemob.Restfull4Net/releases](https://github.com/easonjim/Easemob.Restfull4Net/releases)  
+NuGet：[https://www.nuget.org/packages/Easemob.Restfull4Net/](https://www.nuget.org/packages/Easemob.Restfull4Net/)  
 ####License
 Easemob.Restfull4Net is licensed under the MIT License.
