@@ -57,7 +57,7 @@ namespace Easemob.Restfull4Net.Request
                     //设置缓存
                     if (!string.IsNullOrEmpty(token) && token.Length > 0 && expireSeconds > 0)
                     {
-                        CacheHelper.Insert(base.TokenCacheKey, token, DateTime.Now.AddSeconds(expireSeconds).Second);
+                        CacheHelper.Insert(base.TokenCacheKey, token, expireSeconds);
                     }
                 }
                 catch
