@@ -13,7 +13,8 @@ namespace Easemob.Restfull4Net.Test
 {
     [TestClass]
     public class UserTest
-    {private string _userName
+    {
+        private string _userName
         {
             get
             {
@@ -31,6 +32,24 @@ namespace Easemob.Restfull4Net.Test
         {
             //单个创建
             var user = Client.DefaultSyncRequest.UserCreate(new UserCreateReqeust()
+            {
+                nickname = string.Concat("Test", this._userName),
+                password = "123456",
+                username = string.Concat("Test", this._userName),
+            });
+            Assert.AreEqual(user.StatusCode, HttpStatusCode.OK);
+        }
+
+
+        [TestMethod]
+        public void UserCreateTryCountTest1()/*测试token失效，进行重试创建用户*/
+        {
+            //单个创建
+            var syncRequest = Client.DefaultSyncRequest;
+            //模拟token失效
+            syncRequest.SetToken("test");
+
+            var user = syncRequest.UserCreate(new UserCreateReqeust()
             {
                 nickname = string.Concat("Test", this._userName),
                 password = "123456",

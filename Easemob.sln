@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Easemob.Restfull4Net", "Eas
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Easemob.Restfull4Net.Test", "Easemob.Restfull4Net.Test\Easemob.Restfull4Net.Test.csproj", "{0C642D35-A1A1-4DEE-A7A6-D1330DF52B71}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsApplicationTest", "WindowsFormsApplicationTest\WindowsFormsApplicationTest.csproj", "{C998301E-1A12-4752-B8DA-ACE244E19E07}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplicationTest", "WebApplicationTest\WebApplicationTest.csproj", "{888DDAB2-B0C6-4DA5-8F46-FD37C6DCB25E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{0C642D35-A1A1-4DEE-A7A6-D1330DF52B71}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0C642D35-A1A1-4DEE-A7A6-D1330DF52B71}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0C642D35-A1A1-4DEE-A7A6-D1330DF52B71}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C998301E-1A12-4752-B8DA-ACE244E19E07}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C998301E-1A12-4752-B8DA-ACE244E19E07}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C998301E-1A12-4752-B8DA-ACE244E19E07}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C998301E-1A12-4752-B8DA-ACE244E19E07}.Release|Any CPU.Build.0 = Release|Any CPU
+		{888DDAB2-B0C6-4DA5-8F46-FD37C6DCB25E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{888DDAB2-B0C6-4DA5-8F46-FD37C6DCB25E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{888DDAB2-B0C6-4DA5-8F46-FD37C6DCB25E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{888DDAB2-B0C6-4DA5-8F46-FD37C6DCB25E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Caching;
@@ -42,12 +43,26 @@ namespace Easemob.Restfull4Net.Helper
             return Cache[key];
         }
 
+	    /// <summary>
+	    /// 获取所有缓存
+	    /// </summary>
+	    public static Dictionary<string, object> GetAll()
+	    {
+            IDictionaryEnumerator enumerator = Cache.GetEnumerator();
+            Dictionary<string,object> list = new Dictionary<string, object>();
+            while (enumerator.MoveNext())
+            {
+                list.Add(enumerator.Key.ToString(),enumerator.Value);
+            }
+	        return list;
+	    } 
+
         /// <summary>
         /// 插入缓存
         /// </summary>
         public static void Insert(string key, object obj)
         {
-            Insert(key, obj, null, 1);
+            Insert(key, obj, null, 1 * 60 * 60);//时间为1小时
         }
 
         /// <summary>
@@ -63,7 +78,7 @@ namespace Easemob.Restfull4Net.Helper
         /// </summary>
         public static void Insert(string key, object obj, CacheDependency dep)
         {
-            Insert(key, obj, dep, 0x21c0);
+            Insert(key, obj, dep, 1*60*60);//时间为1小时
         }
 
         /// <summary>

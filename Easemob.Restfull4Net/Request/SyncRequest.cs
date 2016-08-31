@@ -83,6 +83,14 @@ namespace Easemob.Restfull4Net.Request
             return this.GetToken();
         }
 
+        /// <summary>
+        /// 自定义设置token
+        /// </summary>
+        public void SetToken(string token)
+        {
+            CacheHelper.Insert(base.TokenCacheKey, token);
+        }
+
         #endregion
 
         #region 用户体系
@@ -94,13 +102,22 @@ namespace Easemob.Restfull4Net.Request
         /// </summary>
         /// <param name="userCreateReqeust">UserCreateReqeust</param>
         /// <param name="timeOut">默认null为ServerConfig的值</param>
-        public UserResponse UserCreate(UserCreateReqeust userCreateReqeust, int? timeOut = null)
+        /// <param name="tryCount">失败重试次数，默认为0</param>
+        public UserResponse UserCreate(UserCreateReqeust userCreateReqeust, int? timeOut = null,int tryCount = 0)
         {
             var url = base.UrlCreateUsers;
             var formData = (Dictionary<string, object>)userCreateReqeust.ToDictionary<object>();
             var httpTimeOut = timeOut ?? base.ServerConfig.HttpTimeOut;
             var result = Post.PostGetJson<UserResponse>(url, null, formData, null, null, httpTimeOut, base.ServerConfig.MaxJsonLength, base.ServerConfig.IsDebug, ContentType.JSON, base.HeaderDictionary);
-            if (result.StatusCode == HttpStatusCode.Unauthorized)/*token失效*/TryToken();/*只做重新获取token，不做重新请求*/
+            if (result.StatusCode == HttpStatusCode.Unauthorized) /*token失效*/
+            {
+                TryToken();
+                tryCount = 2;//设置重置次数，并往下进行重试
+            }
+            if (result.StatusCode != HttpStatusCode.OK && tryCount>0)
+            {
+                return this.UserCreate(userCreateReqeust, timeOut, --tryCount);
+            }
             return result;
         }
 
@@ -109,13 +126,22 @@ namespace Easemob.Restfull4Net.Request
         /// </summary>
         /// <param name="userCreateReqeusts">UserCreateReqeust</param>
         /// <param name="timeOut">默认null为ServerConfig的值</param>
-        public UserResponse UserCreate(List<UserCreateReqeust> userCreateReqeusts, int? timeOut = null)
+        /// <param name="tryCount">失败重试次数，默认为0</param>
+        public UserResponse UserCreate(List<UserCreateReqeust> userCreateReqeusts, int? timeOut = null, int tryCount = 0)
         {
             var url = base.UrlCreateUsers;
             var formData = userCreateReqeusts;
             var httpTimeOut = timeOut ?? base.ServerConfig.HttpTimeOut;
             var result = Post.PostGetJson<UserResponse, UserCreateReqeust>(url, null, formData, null, null, httpTimeOut, base.ServerConfig.MaxJsonLength, base.ServerConfig.IsDebug, ContentType.JSON, base.HeaderDictionary);
-            if (result.StatusCode == HttpStatusCode.Unauthorized)/*token失效*/TryToken();/*只做重新获取token，不做重新请求*/
+            if (result.StatusCode == HttpStatusCode.Unauthorized) /*token失效*/
+            {
+                TryToken();
+                tryCount = 2;//设置重置次数，并往下进行重试
+            }
+            if (result.StatusCode != HttpStatusCode.OK && tryCount > 0)
+            {
+                return this.UserCreate(userCreateReqeusts, timeOut, --tryCount);
+            }
             return result;
         }
 
@@ -124,12 +150,21 @@ namespace Easemob.Restfull4Net.Request
         /// </summary>
         /// <param name="userName">用户名</param>
         /// <param name="timeOut">默认null为ServerConfig的值</param>
-        public UserResponse UserGet(string userName, int? timeOut = null)
+        /// <param name="tryCount">失败重试次数，默认为0</param>
+        public UserResponse UserGet(string userName, int? timeOut = null, int tryCount = 0)
         {
             var url = string.Format(base.UrlGetUser, userName);
             var httpTimeOut = timeOut ?? base.ServerConfig.HttpTimeOut;
             var result = Get.GetJson<UserResponse>(url, null, base.ServerConfig.MaxJsonLength, base.ServerConfig.IsDebug, base.HeaderDictionary);
-            if (result.StatusCode == HttpStatusCode.Unauthorized)/*token失效*/TryToken();/*只做重新获取token，不做重新请求*/
+            if (result.StatusCode == HttpStatusCode.Unauthorized) /*token失效*/
+            {
+                TryToken();
+                tryCount = 2;//设置重置次数，并往下进行重试
+            }
+            if (result.StatusCode != HttpStatusCode.OK && tryCount > 0)
+            {
+                return this.UserGet(userName, timeOut, --tryCount);
+            }
             return result;
         }
 
@@ -139,12 +174,21 @@ namespace Easemob.Restfull4Net.Request
         /// <param name="timeOut">默认null为ServerConfig的值</param>
         /// <param name="limit">获取数量</param>
         /// <param name="cursor">游标</param>
-        public UserResponse UserGetByLimit(int limit, string cursor, int? timeOut = null)
+        /// <param name="tryCount">失败重试次数，默认为0</param>
+        public UserResponse UserGetByLimit(int limit, string cursor, int? timeOut = null, int tryCount = 0)
         {
             var url = string.Format(base.UrlGetUsers, limit, cursor);
             var httpTimeOut = timeOut ?? base.ServerConfig.HttpTimeOut;
             var result = Get.GetJson<UserResponse>(url, null, base.ServerConfig.MaxJsonLength, base.ServerConfig.IsDebug, base.HeaderDictionary);
-            if (result.StatusCode == HttpStatusCode.Unauthorized)/*token失效*/TryToken();/*只做重新获取token，不做重新请求*/
+            if (result.StatusCode == HttpStatusCode.Unauthorized) /*token失效*/
+            {
+                TryToken();
+                tryCount = 2;//设置重置次数，并往下进行重试
+            }
+            if (result.StatusCode != HttpStatusCode.OK && tryCount > 0)
+            {
+                return this.UserGetByLimit(limit,cursor, timeOut, --tryCount);
+            }
             return result;
         }
 
@@ -153,12 +197,21 @@ namespace Easemob.Restfull4Net.Request
         /// </summary>
         /// <param name="userName">用户名</param>
         /// <param name="timeOut">默认null为ServerConfig的值</param>
-        public UserResponse UserDelete(string userName, int? timeOut = null)
+        /// <param name="tryCount">失败重试次数，默认为0</param>
+        public UserResponse UserDelete(string userName, int? timeOut = null, int tryCount = 0)
         {
             var url = string.Format(base.UrlDeleteUser, userName);
             var httpTimeOut = timeOut ?? base.ServerConfig.HttpTimeOut;
             var result = Delete.DeleteGetJson<UserResponse>(url, null, null, null, null, httpTimeOut, base.ServerConfig.MaxJsonLength, base.ServerConfig.IsDebug, ContentType.JSON, base.HeaderDictionary);
-            if (result.StatusCode == HttpStatusCode.Unauthorized)/*token失效*/TryToken();/*只做重新获取token，不做重新请求*/
+            if (result.StatusCode == HttpStatusCode.Unauthorized) /*token失效*/
+            {
+                TryToken();
+                tryCount = 2;//设置重置次数，并往下进行重试
+            }
+            if (result.StatusCode != HttpStatusCode.OK && tryCount > 0)
+            {
+                return this.UserDelete(userName, timeOut, --tryCount);
+            }
             return result;
         }
 
@@ -167,12 +220,21 @@ namespace Easemob.Restfull4Net.Request
         /// </summary>
         /// <param name="limit">数量</param>
         /// <param name="timeOut">默认null为ServerConfig的值</param>
-        public UserResponse UserDeleteByLimit(int limit, int? timeOut = null)
+        /// <param name="tryCount">失败重试次数，默认为0</param>
+        public UserResponse UserDeleteByLimit(int limit, int? timeOut = null, int tryCount = 0)
         {
             var url = string.Format(base.UrlDeleteUsers, limit);
             var httpTimeOut = timeOut ?? base.ServerConfig.HttpTimeOut;
             var result = Delete.DeleteGetJson<UserResponse>(url, null, null, null, null, httpTimeOut, base.ServerConfig.MaxJsonLength, base.ServerConfig.IsDebug, ContentType.JSON, base.HeaderDictionary);
-            if (result.StatusCode == HttpStatusCode.Unauthorized)/*token失效*/TryToken();/*只做重新获取token，不做重新请求*/
+            if (result.StatusCode == HttpStatusCode.Unauthorized) /*token失效*/
+            {
+                TryToken();
+                tryCount = 2;//设置重置次数，并往下进行重试
+            }
+            if (result.StatusCode != HttpStatusCode.OK && tryCount > 0)
+            {
+                return this.UserDeleteByLimit(limit, timeOut, --tryCount);
+            }
             return result;
         }
 
@@ -181,13 +243,22 @@ namespace Easemob.Restfull4Net.Request
         /// </summary>
         /// <param name="request">UserResetPasswordRequest</param>
         /// <param name="timeOut">默认null为ServerConfig的值</param>
-        public UserResponse UserRestPassword(UserPasswordRestRequest request, int? timeOut = null)
+        /// <param name="tryCount">失败重试次数，默认为0</param>
+        public UserResponse UserRestPassword(UserPasswordRestRequest request, int? timeOut = null, int tryCount = 0)
         {
             var url = string.Format(base.UrlRestPassword,request.username);
             var formData = ObjectJsonHelper.CreateDictionary<UserPasswordRestRequest, Dictionary<string, object>>(new ObjectJsonItem<UserPasswordRestRequest>() { SetKey = (obj => obj.newpassword), Value = request.newpassword });
             var httpTimeOut = timeOut ?? base.ServerConfig.HttpTimeOut;
             var result = Put.PutGetJson<UserResponse>(url, null, formData, null, null, httpTimeOut, base.ServerConfig.MaxJsonLength, base.ServerConfig.IsDebug, ContentType.JSON, base.HeaderDictionary);
-            if (result.StatusCode == HttpStatusCode.Unauthorized)/*token失效*/TryToken();/*只做重新获取token，不做重新请求*/
+            if (result.StatusCode == HttpStatusCode.Unauthorized) /*token失效*/
+            {
+                TryToken();
+                tryCount = 2;//设置重置次数，并往下进行重试
+            }
+            if (result.StatusCode != HttpStatusCode.OK && tryCount > 0)
+            {
+                return this.UserRestPassword(request, timeOut, --tryCount);
+            }
             return result;
         }
 
@@ -196,13 +267,22 @@ namespace Easemob.Restfull4Net.Request
         /// </summary>
         /// <param name="request">UserResetNickNameRequest</param>
         /// <param name="timeOut">默认null为ServerConfig的值</param>
-        public UserResponse UserRestNickName(UserNickNameRestRequest request, int? timeOut = null)
+        /// <param name="tryCount">失败重试次数，默认为0</param>
+        public UserResponse UserRestNickName(UserNickNameRestRequest request, int? timeOut = null, int tryCount = 0)
         {
             var url = string.Format(base.UrlRestNickName, request.username);
             var formData = ObjectJsonHelper.CreateDictionary<UserNickNameRestRequest, Dictionary<string, object>>(new ObjectJsonItem<UserNickNameRestRequest>() { SetKey = (obj => obj.nickname), Value = request.nickname });
             var httpTimeOut = timeOut ?? base.ServerConfig.HttpTimeOut;
             var result = Put.PutGetJson<UserResponse>(url, null, formData, null, null, httpTimeOut, base.ServerConfig.MaxJsonLength, base.ServerConfig.IsDebug, ContentType.JSON, base.HeaderDictionary);
-            if (result.StatusCode == HttpStatusCode.Unauthorized)/*token失效*/TryToken();/*只做重新获取token，不做重新请求*/
+            if (result.StatusCode == HttpStatusCode.Unauthorized) /*token失效*/
+            {
+                TryToken();
+                tryCount = 2;//设置重置次数，并往下进行重试
+            }
+            if (result.StatusCode != HttpStatusCode.OK && tryCount > 0)
+            {
+                return this.UserRestNickName(request, timeOut, --tryCount);
+            }
             return result;
         }
         
@@ -215,12 +295,21 @@ namespace Easemob.Restfull4Net.Request
         /// </summary>
         /// <param name="userFriendAddRequest">UserFriendAddRequest</param>
         /// <param name="timeOut">默认null为ServerConfig的值</param>
-        public UserResponse UserFriendAdd(UserFriendAddRequest userFriendAddRequest, int? timeOut = null)
+        /// <param name="tryCount">失败重试次数，默认为0</param>
+        public UserResponse UserFriendAdd(UserFriendAddRequest userFriendAddRequest, int? timeOut = null, int tryCount = 0)
         {
             var url = string.Format(base.UrlAddFriend,userFriendAddRequest.owner_username,userFriendAddRequest.friend_username);
             var httpTimeOut = timeOut ?? base.ServerConfig.HttpTimeOut;
             var result = Post.PostGetJson<UserResponse>(url, null, null, null, null, httpTimeOut, base.ServerConfig.MaxJsonLength, base.ServerConfig.IsDebug, ContentType.JSON, base.HeaderDictionary);
-            if (result.StatusCode == HttpStatusCode.Unauthorized)/*token失效*/TryToken();/*只做重新获取token，不做重新请求*/
+            if (result.StatusCode == HttpStatusCode.Unauthorized) /*token失效*/
+            {
+                TryToken();
+                tryCount = 2;//设置重置次数，并往下进行重试
+            }
+            if (result.StatusCode != HttpStatusCode.OK && tryCount > 0)
+            {
+                return this.UserFriendAdd(userFriendAddRequest, timeOut, --tryCount);
+            }
             return result;
         }
 
@@ -229,12 +318,21 @@ namespace Easemob.Restfull4Net.Request
         /// </summary>
         /// <param name="userFriendDeleteRequest">UserFriendDeleteRequest</param>
         /// <param name="timeOut">默认null为ServerConfig的值</param>
-        public UserResponse UserFriendDelete(UserFriendDeleteRequest userFriendDeleteRequest, int? timeOut = null)
+        /// <param name="tryCount">失败重试次数，默认为0</param>
+        public UserResponse UserFriendDelete(UserFriendDeleteRequest userFriendDeleteRequest, int? timeOut = null, int tryCount = 0)
         {
             var url = string.Format(base.UrlDeleteFriend, userFriendDeleteRequest.owner_username, userFriendDeleteRequest.friend_username);
             var httpTimeOut = timeOut ?? base.ServerConfig.HttpTimeOut;
             var result = Delete.DeleteGetJson<UserResponse>(url, null, null, null, null, httpTimeOut, base.ServerConfig.MaxJsonLength, base.ServerConfig.IsDebug, ContentType.JSON, base.HeaderDictionary);
-            if (result.StatusCode == HttpStatusCode.Unauthorized)/*token失效*/TryToken();/*只做重新获取token，不做重新请求*/
+            if (result.StatusCode == HttpStatusCode.Unauthorized) /*token失效*/
+            {
+                TryToken();
+                tryCount = 2;//设置重置次数，并往下进行重试
+            }
+            if (result.StatusCode != HttpStatusCode.OK && tryCount > 0)
+            {
+                return this.UserFriendDelete(userFriendDeleteRequest, timeOut, --tryCount);
+            }
             return result;
         }
 
@@ -243,12 +341,21 @@ namespace Easemob.Restfull4Net.Request
         /// </summary>
         /// <param name="userName">用户名</param>
         /// <param name="timeOut">默认null为ServerConfig的值</param>
-        public UserFriendResponse UserFriendGet(string userName, int? timeOut = null)
+        /// <param name="tryCount">失败重试次数，默认为0</param>
+        public UserFriendResponse UserFriendGet(string userName, int? timeOut = null, int tryCount = 0)
         {
             var url = string.Format(base.UrlGetFriend, userName);
             var httpTimeOut = timeOut ?? base.ServerConfig.HttpTimeOut;
             var result = Get.GetJson<UserFriendResponse>(url, null, base.ServerConfig.MaxJsonLength, base.ServerConfig.IsDebug, base.HeaderDictionary);
-            if (result.StatusCode == HttpStatusCode.Unauthorized)/*token失效*/TryToken();/*只做重新获取token，不做重新请求*/
+            if (result.StatusCode == HttpStatusCode.Unauthorized) /*token失效*/
+            {
+                TryToken();
+                tryCount = 2;//设置重置次数，并往下进行重试
+            }
+            if (result.StatusCode != HttpStatusCode.OK && tryCount > 0)
+            {
+                return this.UserFriendGet(userName, timeOut, --tryCount);
+            }
             return result;
         }
 
@@ -257,12 +364,21 @@ namespace Easemob.Restfull4Net.Request
         /// </summary>
         /// <param name="userName">用户名</param>
         /// <param name="timeOut">默认null为ServerConfig的值</param>
-        public UserFriendResponse UserBlockGet(string userName, int? timeOut = null)
+        /// <param name="tryCount">失败重试次数，默认为0</param>
+        public UserFriendResponse UserBlockGet(string userName, int? timeOut = null, int tryCount = 0)
         {
             var url = string.Format(base.UrlGetBlock, userName);
             var httpTimeOut = timeOut ?? base.ServerConfig.HttpTimeOut;
             var result = Get.GetJson<UserFriendResponse>(url, null, base.ServerConfig.MaxJsonLength, base.ServerConfig.IsDebug, base.HeaderDictionary);
-            if (result.StatusCode == HttpStatusCode.Unauthorized)/*token失效*/TryToken();/*只做重新获取token，不做重新请求*/
+            if (result.StatusCode == HttpStatusCode.Unauthorized) /*token失效*/
+            {
+                TryToken();
+                tryCount = 2;//设置重置次数，并往下进行重试
+            }
+            if (result.StatusCode != HttpStatusCode.OK && tryCount > 0)
+            {
+                return this.UserBlockGet(userName, timeOut, --tryCount);
+            }
             return result;
         }
 
@@ -271,13 +387,22 @@ namespace Easemob.Restfull4Net.Request
         /// </summary>
         /// <param name="userBlockAddRequest">UserBlockAddRequest</param>
         /// <param name="timeOut">默认null为ServerConfig的值</param>
-        public UserFriendResponse UserBlockAdd(UserBlockAddRequest userBlockAddRequest, int? timeOut = null)
+        /// <param name="tryCount">失败重试次数，默认为0</param>
+        public UserFriendResponse UserBlockAdd(UserBlockAddRequest userBlockAddRequest, int? timeOut = null, int tryCount = 0)
         {   
             var url = string.Format(base.UrlAddBlock, userBlockAddRequest.owner_username);
             var formData = ObjectJsonHelper.CreateDictionary<UserBlockAddRequest, Dictionary<string, object>>(new ObjectJsonItem<UserBlockAddRequest>() { SetKey = (obj => obj.usernames), Value = userBlockAddRequest.usernames });
             var httpTimeOut = timeOut ?? base.ServerConfig.HttpTimeOut;
             var result = Post.PostGetJson<UserFriendResponse>(url, null, formData, null, null, httpTimeOut, base.ServerConfig.MaxJsonLength, base.ServerConfig.IsDebug, ContentType.JSON, base.HeaderDictionary);
-            if (result.StatusCode == HttpStatusCode.Unauthorized)/*token失效*/TryToken();/*只做重新获取token，不做重新请求*/
+            if (result.StatusCode == HttpStatusCode.Unauthorized) /*token失效*/
+            {
+                TryToken();
+                tryCount = 2;//设置重置次数，并往下进行重试
+            }
+            if (result.StatusCode != HttpStatusCode.OK && tryCount > 0)
+            {
+                return this.UserBlockAdd(userBlockAddRequest, timeOut, --tryCount);
+            }
             return result;
         }
 
@@ -286,12 +411,21 @@ namespace Easemob.Restfull4Net.Request
         /// </summary>
         /// <param name="userBlockDeleteRequest">UserBlockDeleteRequest</param>
         /// <param name="timeOut">默认null为ServerConfig的值</param>
-        public UserFriendResponse UserBlockDelete(UserBlockDeleteRequest userBlockDeleteRequest, int? timeOut = null)
+        /// <param name="tryCount">失败重试次数，默认为0</param>
+        public UserFriendResponse UserBlockDelete(UserBlockDeleteRequest userBlockDeleteRequest, int? timeOut = null, int tryCount = 0)
         {
             var url = string.Format(base.UrlDeleteBlock, userBlockDeleteRequest.owner_username, userBlockDeleteRequest.blocked_username);
             var httpTimeOut = timeOut ?? base.ServerConfig.HttpTimeOut;
             var result = Delete.DeleteGetJson<UserFriendResponse>(url, null, null, null, null, httpTimeOut, base.ServerConfig.MaxJsonLength, base.ServerConfig.IsDebug, ContentType.JSON, base.HeaderDictionary);
-            if (result.StatusCode == HttpStatusCode.Unauthorized)/*token失效*/TryToken();/*只做重新获取token，不做重新请求*/
+            if (result.StatusCode == HttpStatusCode.Unauthorized) /*token失效*/
+            {
+                TryToken();
+                tryCount = 2;//设置重置次数，并往下进行重试
+            }
+            if (result.StatusCode != HttpStatusCode.OK && tryCount > 0)
+            {
+                return this.UserBlockDelete(userBlockDeleteRequest, timeOut, --tryCount);
+            }
             return result;
         }
         #endregion
@@ -303,12 +437,21 @@ namespace Easemob.Restfull4Net.Request
         /// </summary>
         /// <param name="userName">用户名</param>
         /// <param name="timeOut">默认null为ServerConfig的值</param>
-        public UserResponse UserStatusGet(string userName, int? timeOut = null)
+        /// <param name="tryCount">失败重试次数，默认为0</param>
+        public UserResponse UserStatusGet(string userName, int? timeOut = null, int tryCount = 0)
         {
             var url = string.Format(base.UrlGetStatus, userName);
             var httpTimeOut = timeOut ?? base.ServerConfig.HttpTimeOut;
             var result = Get.GetJson<UserResponse>(url, null, base.ServerConfig.MaxJsonLength, base.ServerConfig.IsDebug, base.HeaderDictionary);
-            if (result.StatusCode == HttpStatusCode.Unauthorized)/*token失效*/TryToken();/*只做重新获取token，不做重新请求*/
+            if (result.StatusCode == HttpStatusCode.Unauthorized) /*token失效*/
+            {
+                TryToken();
+                tryCount = 2;//设置重置次数，并往下进行重试
+            }
+            if (result.StatusCode != HttpStatusCode.OK && tryCount > 0)
+            {
+                return this.UserStatusGet(userName, timeOut, --tryCount);
+            }
             return result;
         }
 
@@ -317,12 +460,21 @@ namespace Easemob.Restfull4Net.Request
         /// </summary>
         /// <param name="userName">用户名</param>
         /// <param name="timeOut">默认null为ServerConfig的值</param>
-        public UserResponse UserOfflineMsgCountGet(string userName, int? timeOut = null)
+        /// <param name="tryCount">失败重试次数，默认为0</param>
+        public UserResponse UserOfflineMsgCountGet(string userName, int? timeOut = null, int tryCount = 0)
         {
             var url = string.Format(base.UrlGetOfflineMsgCount, userName);
             var httpTimeOut = timeOut ?? base.ServerConfig.HttpTimeOut;
             var result = Get.GetJson<UserResponse>(url, null, base.ServerConfig.MaxJsonLength, base.ServerConfig.IsDebug, base.HeaderDictionary);
-            if (result.StatusCode == HttpStatusCode.Unauthorized)/*token失效*/TryToken();/*只做重新获取token，不做重新请求*/
+            if (result.StatusCode == HttpStatusCode.Unauthorized) /*token失效*/
+            {
+                TryToken();
+                tryCount = 2;//设置重置次数，并往下进行重试
+            }
+            if (result.StatusCode != HttpStatusCode.OK && tryCount > 0)
+            {
+                return this.UserOfflineMsgCountGet(userName, timeOut, --tryCount);
+            }
             return result;
         }
 
@@ -331,12 +483,21 @@ namespace Easemob.Restfull4Net.Request
         /// </summary>
         /// <param name="request">UserOfflineMsgStatusGetRequest</param>
         /// <param name="timeOut">默认null为ServerConfig的值</param>
-        public UserResponse UserOfflineMsgStatust(UserOfflineMsgStatusGetRequest request, int? timeOut = null)
+        /// <param name="tryCount">失败重试次数，默认为0</param>
+        public UserResponse UserOfflineMsgStatust(UserOfflineMsgStatusGetRequest request, int? timeOut = null, int tryCount = 0)
         {
             var url = string.Format(base.UrlGetOfflineMsgStatus, request.username,request.msg_id);
             var httpTimeOut = timeOut ?? base.ServerConfig.HttpTimeOut;
             var result = Get.GetJson<UserResponse>(url, null, base.ServerConfig.MaxJsonLength, base.ServerConfig.IsDebug, base.HeaderDictionary);
-            if (result.StatusCode == HttpStatusCode.Unauthorized)/*token失效*/TryToken();/*只做重新获取token，不做重新请求*/
+            if (result.StatusCode == HttpStatusCode.Unauthorized) /*token失效*/
+            {
+                TryToken();
+                tryCount = 2;//设置重置次数，并往下进行重试
+            }
+            if (result.StatusCode != HttpStatusCode.OK && tryCount > 0)
+            {
+                return this.UserOfflineMsgStatust(request, timeOut, --tryCount);
+            }
             return result;
         }
         #endregion
@@ -348,12 +509,21 @@ namespace Easemob.Restfull4Net.Request
         /// </summary>
         /// <param name="userName">用户名</param>
         /// <param name="timeOut">默认null为ServerConfig的值</param>
-        public UserResponse UserSetDeactivate(string userName, int? timeOut = null)
+        /// <param name="tryCount">失败重试次数，默认为0</param>
+        public UserResponse UserSetDeactivate(string userName, int? timeOut = null, int tryCount = 0)
         {
             var url = string.Format(base.UrlSetUserDeactivate,userName);
             var httpTimeOut = timeOut ?? base.ServerConfig.HttpTimeOut;
             var result = Post.PostGetJson<UserResponse>(url, null, null, null, null, httpTimeOut, base.ServerConfig.MaxJsonLength, base.ServerConfig.IsDebug, ContentType.JSON, base.HeaderDictionary);
-            if (result.StatusCode == HttpStatusCode.Unauthorized)/*token失效*/TryToken();/*只做重新获取token，不做重新请求*/
+            if (result.StatusCode == HttpStatusCode.Unauthorized) /*token失效*/
+            {
+                TryToken();
+                tryCount = 2;//设置重置次数，并往下进行重试
+            }
+            if (result.StatusCode != HttpStatusCode.OK && tryCount > 0)
+            {
+                return this.UserSetDeactivate(userName, timeOut, --tryCount);
+            }
             return result;
         }
 
@@ -362,12 +532,21 @@ namespace Easemob.Restfull4Net.Request
         /// </summary>
         /// <param name="userName">用户名</param>
         /// <param name="timeOut">默认null为ServerConfig的值</param>
-        public UserResponse UserSetActivate(string userName, int? timeOut = null)
+        /// <param name="tryCount">失败重试次数，默认为0</param>
+        public UserResponse UserSetActivate(string userName, int? timeOut = null, int tryCount = 0)
         {
             var url = string.Format(base.UrlSetUserActivate, userName);
             var httpTimeOut = timeOut ?? base.ServerConfig.HttpTimeOut;
             var result = Post.PostGetJson<UserResponse>(url, null, null, null, null, httpTimeOut, base.ServerConfig.MaxJsonLength, base.ServerConfig.IsDebug, ContentType.JSON, base.HeaderDictionary);
-            if (result.StatusCode == HttpStatusCode.Unauthorized)/*token失效*/TryToken();/*只做重新获取token，不做重新请求*/
+            if (result.StatusCode == HttpStatusCode.Unauthorized) /*token失效*/
+            {
+                TryToken();
+                tryCount = 2;//设置重置次数，并往下进行重试
+            }
+            if (result.StatusCode != HttpStatusCode.OK && tryCount > 0)
+            {
+                return this.UserSetActivate(userName, timeOut, --tryCount);
+            }
             return result;
         }
 
@@ -380,12 +559,21 @@ namespace Easemob.Restfull4Net.Request
         /// </summary>
         /// <param name="userName">用户名</param>
         /// <param name="timeOut">默认null为ServerConfig的值</param>
-        public UserResponse UserSetDisconnect(string userName, int? timeOut = null)
+        /// <param name="tryCount">失败重试次数，默认为0</param>
+        public UserResponse UserSetDisconnect(string userName, int? timeOut = null, int tryCount = 0)
         {
             var url = string.Format(base.UrlSetUserDeactivate,userName);
             var httpTimeOut = timeOut ?? base.ServerConfig.HttpTimeOut;
             var result = Get.GetJson<UserResponse>(url, null, base.ServerConfig.MaxJsonLength, base.ServerConfig.IsDebug, base.HeaderDictionary);
-            if (result.StatusCode == HttpStatusCode.Unauthorized)/*token失效*/TryToken();/*只做重新获取token，不做重新请求*/
+            if (result.StatusCode == HttpStatusCode.Unauthorized) /*token失效*/
+            {
+                TryToken();
+                tryCount = 2;//设置重置次数，并往下进行重试
+            }
+            if (result.StatusCode != HttpStatusCode.OK && tryCount > 0)
+            {
+                return this.UserSetDisconnect(userName, timeOut, --tryCount);
+            }
             return result;
         }
 
@@ -404,12 +592,21 @@ namespace Easemob.Restfull4Net.Request
         /// <param name="ql">条件，已对空格做了+号处理，详见：http://docs.easemob.com/start/100serverintegration/30chatlog</param>
         /// <param name="limit">获取数量,max:1000</param>
         /// <param name="cursor">游标</param>
-        public ChatMsgResponse ChatMsgExport(string ql,int? limit = null, string cursor = null, int? timeOut = null)
+        /// <param name="tryCount">失败重试次数，默认为0</param>
+        public ChatMsgResponse ChatMsgExport(string ql, int? limit = null, string cursor = null, int? timeOut = null, int tryCount = 0)
         {
             var url = string.Format(base.UrlExportChatMsg,ql.Replace(" ","+"), limit, cursor);
             var httpTimeOut = timeOut ?? base.ServerConfig.HttpTimeOut;
             var result = Get.GetJson<ChatMsgResponse>(url, null, base.ServerConfig.MaxJsonLength, base.ServerConfig.IsDebug, base.HeaderDictionary);
-            if (result.StatusCode == HttpStatusCode.Unauthorized)/*token失效*/TryToken();/*只做重新获取token，不做重新请求*/
+            if (result.StatusCode == HttpStatusCode.Unauthorized) /*token失效*/
+            {
+                TryToken();
+                tryCount = 2;//设置重置次数，并往下进行重试
+            }
+            if (result.StatusCode != HttpStatusCode.OK && tryCount > 0)
+            {
+                return this.ChatMsgExport(ql,limit,cursor, timeOut, --tryCount);
+            }
             return result;
         }
 
@@ -424,13 +621,22 @@ namespace Easemob.Restfull4Net.Request
         /// </summary>
         /// <param name="msgRequest">MsgRequest</param>
         /// <param name="timeOut">默认null为ServerConfig的值</param>
-        public MsgResponse MsgSend<T>(MsgRequest<T> msgRequest, int? timeOut = null) where T:BaseMsg 
+        /// <param name="tryCount">失败重试次数，默认为0</param>
+        public MsgResponse MsgSend<T>(MsgRequest<T> msgRequest, int? timeOut = null, int tryCount = 0) where T : BaseMsg 
         {
             var url = base.UrlSendMsg;
             var formData = (Dictionary<string, object>)msgRequest.ToDictionary<object>();
             var httpTimeOut = timeOut ?? base.ServerConfig.HttpTimeOut;
             var result = Post.PostGetJson<MsgResponse>(url, null, formData, null, null, httpTimeOut, base.ServerConfig.MaxJsonLength, base.ServerConfig.IsDebug, ContentType.JSON, base.HeaderDictionary);
-            if (result.StatusCode == HttpStatusCode.Unauthorized)/*token失效*/TryToken();/*只做重新获取token，不做重新请求*/
+            if (result.StatusCode == HttpStatusCode.Unauthorized) /*token失效*/
+            {
+                TryToken();
+                tryCount = 2;//设置重置次数，并往下进行重试
+            }
+            if (result.StatusCode != HttpStatusCode.OK && tryCount > 0)
+            {
+                return this.MsgSend(msgRequest, timeOut, --tryCount);
+            }
             return result;
         }
 
@@ -443,14 +649,23 @@ namespace Easemob.Restfull4Net.Request
         /// </summary>
         /// <param name="filePath">文件本地绝对路径</param>
         /// <param name="timeOut">默认null为ServerConfig的值</param>
-        public ChatFileResponse ChatFileUpload(string filePath, int? timeOut = null)
+        /// <param name="tryCount">失败重试次数，默认为0</param>
+        public ChatFileResponse ChatFileUpload(string filePath, int? timeOut = null, int tryCount = 0)
         {
             var headerDictionary = new Dictionary<string, string>(base.HeaderDictionary) { { "restrict-access","true" } };//解决并发问题
             var url = base.UrlUploadFiles;
             var fileData = new Dictionary<string,string>(){{"file",filePath}};
             var httpTimeOut = timeOut ?? base.ServerConfig.HttpTimeOut;
             var result = Post.PostGetJson<ChatFileResponse>(url, null, new Dictionary<string, object>(),fileData, null, null, httpTimeOut, base.ServerConfig.MaxJsonLength, base.ServerConfig.IsDebug, null, headerDictionary);
-            if (result.StatusCode == HttpStatusCode.Unauthorized)/*token失效*/TryToken();/*只做重新获取token，不做重新请求*/
+            if (result.StatusCode == HttpStatusCode.Unauthorized) /*token失效*/
+            {
+                TryToken();
+                tryCount = 2;//设置重置次数，并往下进行重试
+            }
+            if (result.StatusCode != HttpStatusCode.OK && tryCount > 0)
+            {
+                return this.ChatFileUpload(filePath, timeOut, --tryCount);
+            }
             return result;
         }
 
@@ -461,7 +676,7 @@ namespace Easemob.Restfull4Net.Request
         /// <param name="uuid">上传资源时返回的uuid</param>
         /// <param name="stream">Stream</param>
         /// <param name="timeOut">默认null为ServerConfig的值</param>
-        public ChatFileResponse ChatFileDownload(string shareSecret, string uuid,Stream stream, int? timeOut = null)
+        public ChatFileResponse ChatFileDownload(string shareSecret, string uuid, Stream stream, int? timeOut = null)
         {
             var headerDictionary = new Dictionary<string, string>(base.HeaderDictionary) { { "share-secret", shareSecret } };//解决并发问题
             var url = string.Format(base.UrlDownloadFiles, uuid);

@@ -7,6 +7,9 @@ using Easemob.Restfull4Net.Utility.HttpUtility;
 
 namespace Easemob.Restfull4Net.Request
 {
+    /// <summary>
+    /// 请求基类
+    /// </summary>
     public abstract class BaseRequest
     {
         /// <summary>
@@ -17,13 +20,14 @@ namespace Easemob.Restfull4Net.Request
         /// <summary>
         /// 自定义标记头
         /// </summary>
-        protected Dictionary<string, string> HeaderDictionary = null;
+        protected Dictionary<string, string> HeaderDictionary{get{return new Dictionary<string, string> {{"Authorization", string.Format("Bearer {0}", GetToken())}};}}
 
+        /// <summary>
+        /// 通过IServerConfig对象进行构造连接
+        /// </summary>
         protected BaseRequest(IServerConfig serverConfig)
         {
             this.ServerConfig = serverConfig;
-
-            this.HeaderDictionary = new Dictionary<string, string> {{"Authorization", string.Format("Bearer {0}", GetToken())}};
         }
 
         #region Token
