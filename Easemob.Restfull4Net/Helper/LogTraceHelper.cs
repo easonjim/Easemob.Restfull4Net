@@ -28,19 +28,18 @@ namespace Easemob.Restfull4Net.Helper
         internal static void Open(string filePath=null)
         {
             Close();
-            lock (TraceLock)
+            var logDir = string.Concat(System.AppDomain.CurrentDomain.BaseDirectory ,"/", (filePath ?? DefaultFilePath));
+            if (!Directory.Exists(logDir))
             {
-                var logDir = string.Concat(System.AppDomain.CurrentDomain.BaseDirectory ,"/", (filePath ?? DefaultFilePath));
-                if (!Directory.Exists(logDir))
-                {
-                    Directory.CreateDirectory(logDir);
-                }
-                string logFile = Path.Combine(logDir, string.Format("{0}.log",DateTime.Now.ToString("yyyy-MM-dd")));
-                System.IO.TextWriter logWriter = new System.IO.StreamWriter(logFile, true);
-                _traceListener = new TextWriterTraceListener(logWriter);
-                System.Diagnostics.Trace.Listeners.Add(_traceListener);
-                System.Diagnostics.Trace.AutoFlush = true;
+                Directory.CreateDirectory(logDir);
             }
+            string logFile = Path.Combine(logDir, string.Format("{0}.log",DateTime.Now.ToString("yyyy-MM-dd")));
+            FileStream fs = new FileStream(logFile, FileMode.Append, FileAccess.Write, FileShare.Write, 1024, FileOptions.Asynchronous);
+            
+            //System.IO.TextWriter logWriter = new System.IO.StreamWriter(logFile, true);
+            _traceListener = new TextWriterTraceListener(fs);
+            System.Diagnostics.Trace.Listeners.Add(_traceListener);
+            System.Diagnostics.Trace.AutoFlush = true;
         }
 
         /// <summary>
@@ -48,13 +47,10 @@ namespace Easemob.Restfull4Net.Helper
         /// </summary>
         internal static void Close()
         {
-            lock (TraceLock)
+            if (_traceListener != null && System.Diagnostics.Trace.Listeners.Contains(_traceListener))
             {
-                if (_traceListener != null && System.Diagnostics.Trace.Listeners.Contains(_traceListener))
-                {
-                    _traceListener.Close();
-                    System.Diagnostics.Trace.Listeners.Remove(_traceListener);
-                }
+                _traceListener.Close();
+                System.Diagnostics.Trace.Listeners.Remove(_traceListener);
             }
         }
 
@@ -71,10 +67,7 @@ namespace Easemob.Restfull4Net.Helper
         /// </summary>
         private static void Unindent()
         {
-            lock (TraceLock)
-            {
-                System.Diagnostics.Trace.Unindent();
-            }
+            System.Diagnostics.Trace.Unindent();
         }
 
         /// <summary>
@@ -82,10 +75,7 @@ namespace Easemob.Restfull4Net.Helper
         /// </summary>
         private static void Indent()
         {
-            lock (TraceLock)
-            {
-                System.Diagnostics.Trace.Indent();
-            }
+            System.Diagnostics.Trace.Indent();
         }
 
         /// <summary>
@@ -93,10 +83,7 @@ namespace Easemob.Restfull4Net.Helper
         /// </summary>
         private static void Flush()
         {
-            lock (TraceLock)
-            {
-                System.Diagnostics.Trace.Flush();
-            }
+            System.Diagnostics.Trace.Flush();
         }
 
         /// <summary>
@@ -122,10 +109,7 @@ namespace Easemob.Restfull4Net.Helper
         /// <param name="message">内容</param>
         private static void Log(string message)
         {
-            lock (TraceLock)
-            {
-                System.Diagnostics.Trace.WriteLine(message);
-            }
+            System.Diagnostics.Trace.WriteLine(message);
         }
 
         /// <summary>
@@ -165,10 +149,13 @@ namespace Easemob.Restfull4Net.Helper
         {
             if (isDebug)
             {
-                LogBegin(startTitle ?? "日志输出开始", logFilePath);
-                Log(string.Format("Path：\r\n\t{0}", path ?? "Null"));
-                Log(string.Format("Content：\r\n\t{0}", content));
-                LogEnd(endTitle ?? "日志输出结束", type, content);
+                lock (TraceLock)//操作IO时要注意占用问题
+                {
+                    LogBegin(startTitle ?? "日志输出开始", logFilePath);
+                    Log(string.Format("Path：\r\n\t{0}", path ?? "Null"));
+                    Log(string.Format("Content：\r\n\t{0}", content));
+                    LogEnd(endTitle ?? "日志输出结束", type, content);
+                }
             }
         }
     }

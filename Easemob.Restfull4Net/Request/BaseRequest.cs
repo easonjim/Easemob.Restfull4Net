@@ -285,8 +285,250 @@ namespace Easemob.Restfull4Net.Request
 
         #endregion
 
+        #region 群组管理
+
+        #region 获取群组
+
+        /// <summary>
+        /// 获取 APP 中所有的群组
+        /// 分页获取 APP 下的群组
+        /// </summary>
+        protected string UrlChatGroupsGet
+        {
+            get { return string.Concat(this.UrlBase, "chatgroups"); }
+        }
+
+        /// <summary>
+        /// 分页获取 APP 下的群组
+        /// </summary>
+        protected string UrlChatGroupsGetByLimit
+        {
+            get { return string.Concat(this.UrlBase, "chatgroups"); }
+        }
+
+        /// <summary>
+        /// 获取群组详情
+        /// 可以获取一个或多个群组的详情
+        /// </summary>
+        protected string UrlChatGroupsDetails
+        {
+            get { return string.Concat(this.UrlBase, "chatgroups/{0}"); }
+        }
+
         #endregion
 
+        #region 管理群组
         
+        /// <summary>
+        /// 创建一个群组
+        /// </summary>
+        protected string UrlChatGroupsCreate
+        {
+            get { return string.Concat(this.UrlBase, "chatgroups"); }
+        }
+
+        /// <summary>
+        /// 修改群组信息
+        /// </summary>
+        protected string UrlChatGroupsUpdate
+        {
+            get { return string.Concat(this.UrlBase, "chatgroups/{0}"); }
+        }
+
+        /// <summary>
+        /// 删除群组
+        /// </summary>
+        protected string UrlChatGroupsDelete
+        {
+            get { return string.Concat(this.UrlBase, "chatgroups/{0}"); }
+        }
+
+        /// <summary>
+        /// 添加群组成员[单个]
+        /// </summary>
+        protected string UrlChatGroupsUserAdd
+        {
+            get { return string.Concat(this.UrlBase, "chatgroups/{0}/users/{1}"); }
+        }
+
+        /// <summary>
+        /// 添加群组成员[批量]
+        /// 为群组添加多个成员，一次最多可以添加60位成员。
+        /// </summary>
+        protected string UrlChatGroupsUserBatchAdd
+        {
+            get { return string.Concat(this.UrlBase, "chatgroups/{0}/users"); }
+        }
+
+        /// <summary>
+        /// 移除群组成员[单个]
+        /// </summary>
+        protected string UrlChatGroupsUserDelete
+        {
+            get { return string.Concat(this.UrlBase, "chatgroups/{0}/users/{1}"); }
+        }
+
+        /// <summary>
+        /// 移除群组成员[批量]
+        /// </summary>
+        protected string UrlChatGroupsUserBatchDelete
+        {
+            get { return string.Concat(this.UrlBase, "chatgroups/{0}/users/{1}"); }
+        }
+
+        /// <summary>
+        /// 获取一个用户参与的所有群组
+        /// </summary>
+        protected string UrlChatGroupsUserJoin
+        {
+            get { return string.Concat(this.UrlBase, "users/{0}/joined_chatgroups"); }
+        }
+
+        /// <summary>
+        /// 转让群组
+        /// </summary>
+        protected string UrlChatGroupsTran
+        {
+            get { return string.Concat(this.UrlBase, "chatgroups/{0}"); }
+        }
+
+        #endregion
+
+        #region 黑名单管理
+        
+        /// <summary>
+        /// 查询群组黑名单
+        /// </summary>
+        protected string UrlChatGroupsBlockUserGet
+        {
+            get { return string.Concat(this.UrlBase, "chatgroups/{0}/blocks/users"); }
+        }
+
+        /// <summary>
+        /// 添加用户至群组黑名单[单个]
+        /// </summary>
+        protected string UrlChatGroupsBlockUserAdd
+        {
+            get { return string.Concat(this.UrlBase, "chatgroups/{0}/blocks/users/{1}"); }
+        }
+
+        /// <summary>
+        /// 添加用户至群组黑名单[批量]
+        /// 添加多个用户进入一个群组的黑名单，一次性最多可以添加60个用户
+        /// </summary>
+        protected string UrlChatGroupsBlockUserBatchAdd
+        {
+            get { return string.Concat(this.UrlBase, "chatgroups/{group_id}/blocks/users"); }
+        }
+
+        /// <summary>
+        /// 从群组黑名单移除用户[单个]
+        /// </summary>
+        protected string UrlChatGroupsBlockUserDelete
+        {
+            get { return string.Concat(this.UrlBase, "chatgroups/{0}/blocks/users/{1}"); }
+        }
+
+        /// <summary>
+        /// 从群组黑名单移除用户[批量]
+        /// </summary>
+        protected string UrlChatGroupsBlockUserBatchDelete
+        {
+            get { return string.Concat(this.UrlBase, "chatgroups/{0}/blocks/users/{1}"); }
+        }
+        #endregion
+            
+        #endregion
+
+        #region 聊天室管理
+
+        #region 管理聊天室
+        
+        /// <summary>
+        /// 创建聊天室
+        /// </summary>
+        protected string UrlChatRoomsCreate
+        {
+            get { return string.Concat(this.UrlBase, "chatrooms"); }
+        }
+
+        /// <summary>
+        /// 修改聊天室信息
+        /// </summary>
+        protected string UrlChatRoomsUpdate
+        {
+            get { return string.Concat(this.UrlBase, "chatrooms/{0}"); }
+        }
+
+        /// <summary>
+        /// 删除聊天室
+        /// </summary>
+        protected string UrlChatRoomsDelete
+        {
+            get { return string.Concat(this.UrlBase, "chatrooms/{0}"); }
+        }
+
+        /// <summary>
+        /// 获取 APP 中所有的聊天室
+        /// </summary>
+        protected string UrlChatRoomsGet
+        {
+            get { return string.Concat(this.UrlBase, "chatrooms"); }
+        }
+
+        /// <summary>
+        /// 获取一个聊天室详情
+        /// </summary>
+        protected string UrlChatRoomsDetails
+        {
+            get { return string.Concat(this.UrlBase, "chatrooms/{0}"); }
+        }
+
+        /// <summary>
+        /// 获取用户加入的聊天室
+        /// </summary>
+        protected string UrlChatRoomsUserJoin
+        {
+            get { return string.Concat(this.UrlBase, "users/{0}/joined_chatrooms"); }
+        }
+
+        /// <summary>
+        /// 添加聊天室成员[单个]
+        /// </summary>
+        protected string UrlChatRoomsUserAdd
+        {
+            get { return string.Concat(this.UrlBase, "chatrooms/{0}/users/{1}"); }
+        }
+
+        /// <summary>
+        /// 添加聊天室成员[批量]
+        /// </summary>
+        protected string UrlChatRoomsUserBatchAdd
+        {
+            get { return string.Concat(this.UrlBase, "chatrooms/{0}/users"); }
+        }
+
+        /// <summary>
+        /// 删除聊天室成员[单个]
+        /// </summary>
+        protected string UrlChatRoomsUserDelete
+        {
+            get { return string.Concat(this.UrlBase, "chatrooms/{0}/users/{1}"); }
+        }
+        
+        /// <summary>
+        /// 删除聊天室成员[批量]
+        /// </summary>
+        protected string UrlChatRoomsUserBatchDelete
+        {
+            get { return string.Concat(this.UrlBase, "chatrooms/{0}/users/{1}"); }
+        }
+        #endregion
+
+        #endregion
+
+        #endregion
+
+
     }
 }
