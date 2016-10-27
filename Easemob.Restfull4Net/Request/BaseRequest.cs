@@ -303,7 +303,7 @@ namespace Easemob.Restfull4Net.Request
         /// </summary>
         protected string UrlChatGroupsGetByLimit
         {
-            get { return string.Concat(this.UrlBase, "chatgroups"); }
+            get { return string.Concat(this.UrlBase, "chatgroups?limit={0}&cursor={1}"); }
         }
 
         /// <summary>
@@ -344,9 +344,17 @@ namespace Easemob.Restfull4Net.Request
         }
 
         /// <summary>
+        /// 获取群组所有成员
+        /// </summary>
+        protected string UrlChatGroupsMemberAll
+        {
+            get { return string.Concat(this.UrlBase, "chatgroups/{0}/users"); }
+        }
+
+        /// <summary>
         /// 添加群组成员[单个]
         /// </summary>
-        protected string UrlChatGroupsUserAdd
+        protected string UrlChatGroupsMemberAdd
         {
             get { return string.Concat(this.UrlBase, "chatgroups/{0}/users/{1}"); }
         }
@@ -355,7 +363,7 @@ namespace Easemob.Restfull4Net.Request
         /// 添加群组成员[批量]
         /// 为群组添加多个成员，一次最多可以添加60位成员。
         /// </summary>
-        protected string UrlChatGroupsUserBatchAdd
+        protected string UrlChatGroupsMemberAddBatch
         {
             get { return string.Concat(this.UrlBase, "chatgroups/{0}/users"); }
         }
@@ -363,7 +371,7 @@ namespace Easemob.Restfull4Net.Request
         /// <summary>
         /// 移除群组成员[单个]
         /// </summary>
-        protected string UrlChatGroupsUserDelete
+        protected string UrlChatGroupsMemberDelete
         {
             get { return string.Concat(this.UrlBase, "chatgroups/{0}/users/{1}"); }
         }
@@ -371,7 +379,7 @@ namespace Easemob.Restfull4Net.Request
         /// <summary>
         /// 移除群组成员[批量]
         /// </summary>
-        protected string UrlChatGroupsUserBatchDelete
+        protected string UrlChatGroupsMemberDeleteBatch
         {
             get { return string.Concat(this.UrlBase, "chatgroups/{0}/users/{1}"); }
         }
@@ -379,7 +387,7 @@ namespace Easemob.Restfull4Net.Request
         /// <summary>
         /// 获取一个用户参与的所有群组
         /// </summary>
-        protected string UrlChatGroupsUserJoin
+        protected string UrlChatGroupsUser
         {
             get { return string.Concat(this.UrlBase, "users/{0}/joined_chatgroups"); }
         }
@@ -387,7 +395,7 @@ namespace Easemob.Restfull4Net.Request
         /// <summary>
         /// 转让群组
         /// </summary>
-        protected string UrlChatGroupsTran
+        protected string UrlChatGroupsChange
         {
             get { return string.Concat(this.UrlBase, "chatgroups/{0}"); }
         }
@@ -399,7 +407,7 @@ namespace Easemob.Restfull4Net.Request
         /// <summary>
         /// 查询群组黑名单
         /// </summary>
-        protected string UrlChatGroupsBlockUserGet
+        protected string UrlChatGroupsBlock
         {
             get { return string.Concat(this.UrlBase, "chatgroups/{0}/blocks/users"); }
         }
@@ -407,7 +415,7 @@ namespace Easemob.Restfull4Net.Request
         /// <summary>
         /// 添加用户至群组黑名单[单个]
         /// </summary>
-        protected string UrlChatGroupsBlockUserAdd
+        protected string UrlChatGroupsBlockAdd
         {
             get { return string.Concat(this.UrlBase, "chatgroups/{0}/blocks/users/{1}"); }
         }
@@ -416,15 +424,15 @@ namespace Easemob.Restfull4Net.Request
         /// 添加用户至群组黑名单[批量]
         /// 添加多个用户进入一个群组的黑名单，一次性最多可以添加60个用户
         /// </summary>
-        protected string UrlChatGroupsBlockUserBatchAdd
+        protected string UrlChatGroupsBlockAddBatch
         {
-            get { return string.Concat(this.UrlBase, "chatgroups/{group_id}/blocks/users"); }
+            get { return string.Concat(this.UrlBase, "chatgroups/{0}/blocks/users"); }
         }
 
         /// <summary>
         /// 从群组黑名单移除用户[单个]
         /// </summary>
-        protected string UrlChatGroupsBlockUserDelete
+        protected string UrlChatGroupsBlockDelete
         {
             get { return string.Concat(this.UrlBase, "chatgroups/{0}/blocks/users/{1}"); }
         }
@@ -432,7 +440,7 @@ namespace Easemob.Restfull4Net.Request
         /// <summary>
         /// 从群组黑名单移除用户[批量]
         /// </summary>
-        protected string UrlChatGroupsBlockUserBatchDelete
+        protected string UrlChatGroupsBlockDeleteBatch
         {
             get { return string.Concat(this.UrlBase, "chatgroups/{0}/blocks/users/{1}"); }
         }

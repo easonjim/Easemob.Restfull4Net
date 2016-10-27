@@ -56,6 +56,10 @@
     <Compile Include="Config\CustomServerConfig.cs" />
     <Compile Include="Config\IServerConfig.cs" />
     <Compile Include="Config\ServerConfig.cs" />
+    <Compile Include="Entity\Request\ChatGroup\UpdateChatGroupRequest.cs" />
+    <Compile Include="Entity\Request\ChatGroup\CreateChatGroupRequest.cs" />
+    <Compile Include="Entity\Request\ChatRoom\UpdateChatRoomRequest.cs" />
+    <Compile Include="Entity\Request\ChatRoom\CreateChatRoomRequest.cs" />
     <Compile Include="Entity\Request\User\UserCreateReqeust.cs" />
     <Compile Include="Entity\Request\Token\TokenRequest.cs" />
     <Compile Include="Entity\Request\User\UserBlockAddRequest.cs" />
@@ -68,8 +72,10 @@
     <Compile Include="Entity\Response\Base\BaseResponse.cs" />
     <Compile Include="Entity\Response\ChatFile\ChatFileResponse.cs" />
     <Compile Include="Entity\Response\Base\ErrorResponse.cs" />
+    <Compile Include="Entity\Response\ChatGroup\ChatGroupResponse.cs" />
     <Compile Include="Entity\Response\ChatMsg\ChatMsgResponse.cs" />
     <Compile Include="Entity\Request\Msg\MsgRequest.cs" />
+    <Compile Include="Entity\Response\ChatRoom\ChaRoomResponse.cs" />
     <Compile Include="Entity\Response\Msg\MsgResponse.cs" />
     <Compile Include="Entity\Response\Token\TokenResponse.cs" />
     <Compile Include="Entity\Response\User\UserFriendResponse.cs" />

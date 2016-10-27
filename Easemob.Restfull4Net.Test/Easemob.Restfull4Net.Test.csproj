@@ -54,6 +54,8 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="ChatRoomTest.cs" />
+    <Compile Include="ChatGroupTest.cs" />
     <Compile Include="LogTraceHelperTest.cs" />
     <Compile Include="GetTokenTest.cs" />
     <Compile Include="ChatFileTest.cs" />

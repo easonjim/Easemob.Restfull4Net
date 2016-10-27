@@ -717,5 +717,695 @@ namespace Easemob.Restfull4Net.Request
             }
         }
         #endregion
+
+        #region 群组管理
+
+        #region 获取群组
+
+        /// <summary>
+        /// 获取 APP 中所有的群组
+        /// </summary>
+        /// <param name="timeOut">默认null为ServerConfig的值</param>
+        /// <param name="tryCount">失败重试次数，默认为0</param>
+        public ChatGroupResponseList ChatGroupGet(int? timeOut = null, int tryCount = 0)
+        {
+            var url = string.Format(base.UrlChatGroupsGet);
+            var httpTimeOut = timeOut ?? base.ServerConfig.HttpTimeOut;
+            var result = Get.GetJson<ChatGroupResponseList>(url, null,null,null,null,httpTimeOut, base.ServerConfig.MaxJsonLength, base.ServerConfig.IsDebug, base.HeaderDictionary);
+            if (result.StatusCode == HttpStatusCode.Unauthorized) /*token失效*/
+            {
+                TryToken();
+                tryCount = 2;//设置重置次数，并往下进行重试
+            }
+            if (result.StatusCode != HttpStatusCode.OK && tryCount > 0)
+            {
+                return this.ChatGroupGet(timeOut, --tryCount);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 分页获取 APP 下的群组
+        /// </summary>
+        /// <param name="limit">预期获取的记录数</param>
+        /// <param name="cursor">游标，如果数据还有下一页，API 返回值会包含此字段</param>
+        /// <param name="timeOut">默认null为ServerConfig的值</param>
+        /// <param name="tryCount">失败重试次数，默认为0</param>
+        public ChatGroupResponseList ChatGroupGetByLimit(int limit,string cursor = "",int? timeOut = null, int tryCount = 0)
+        {
+            var url = string.Format(base.UrlChatGroupsGetByLimit,limit,cursor);
+            var httpTimeOut = timeOut ?? base.ServerConfig.HttpTimeOut;
+            var result = Get.GetJson<ChatGroupResponseList>(url, null, null, null, null, httpTimeOut, base.ServerConfig.MaxJsonLength, base.ServerConfig.IsDebug, base.HeaderDictionary);
+            if (result.StatusCode == HttpStatusCode.Unauthorized) /*token失效*/
+            {
+                TryToken();
+                tryCount = 2;//设置重置次数，并往下进行重试
+            }
+            if (result.StatusCode != HttpStatusCode.OK && tryCount > 0)
+            {
+                return this.ChatGroupGetByLimit(limit, cursor, timeOut, --tryCount);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 获取群组详情
+        /// </summary>
+        /// <param name="groupIDs">群组ID数组</param>
+        /// <param name="timeOut">默认null为ServerConfig的值</param>
+        /// <param name="tryCount">失败重试次数，默认为0</param>
+        public ChatGroupResponse ChatGroupDetails(string[] groupIDs, int? timeOut = null, int tryCount = 0)
+        {
+            var url = string.Format(base.UrlChatGroupsDetails, string.Join(",",groupIDs));
+            var httpTimeOut = timeOut ?? base.ServerConfig.HttpTimeOut;
+            var result = Get.GetJson<ChatGroupResponse>(url, null, null, null, null, httpTimeOut, base.ServerConfig.MaxJsonLength, base.ServerConfig.IsDebug, base.HeaderDictionary);
+            if (result.StatusCode == HttpStatusCode.Unauthorized) /*token失效*/
+            {
+                TryToken();
+                tryCount = 2;//设置重置次数，并往下进行重试
+            }
+            if (result.StatusCode != HttpStatusCode.OK && tryCount > 0)
+            {
+                return this.ChatGroupDetails(groupIDs, timeOut, --tryCount);
+            }
+            return result;
+        }
+        #endregion
+
+        #region 管理群组
+
+        /// <summary>
+        /// 创建一个群组
+        /// </summary>
+        /// <param name="createChatGroupRequest">请求实体</param>
+        /// <param name="timeOut">默认null为ServerConfig的值</param>
+        /// <param name="tryCount">失败重试次数，默认为0</param>
+        public ChatGroupResponseCreate ChatGroupCreate(CreateChatGroupRequest createChatGroupRequest, int? timeOut = null, int tryCount = 0)
+        {
+            var url = base.UrlChatGroupsCreate;
+            var formData = (Dictionary<string, object>)createChatGroupRequest.ToDictionary<object>();
+            var httpTimeOut = timeOut ?? base.ServerConfig.HttpTimeOut;
+            var result = Post.PostGetJson<ChatGroupResponseCreate>(url, null, formData,null, null, httpTimeOut, base.ServerConfig.MaxJsonLength, base.ServerConfig.IsDebug, ContentType.JSON, base.HeaderDictionary);
+            if (result.StatusCode == HttpStatusCode.Unauthorized) /*token失效*/
+            {
+                TryToken();
+                tryCount = 2;//设置重置次数，并往下进行重试
+            }
+            if (result.StatusCode != HttpStatusCode.OK && tryCount > 0)
+            {
+                return this.ChatGroupCreate(createChatGroupRequest, timeOut, --tryCount);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 修改群组信息
+        /// </summary>
+        /// <param name="groupID">群组ID</param>
+        /// <param name="updateChatGroupRequest">请求实体</param>
+        /// <param name="timeOut">默认null为ServerConfig的值</param>
+        /// <param name="tryCount">失败重试次数，默认为0</param>
+        public ChatGroupResponseUpdate ChatGroupUpdate(string groupID,UpdateChatGroupRequest updateChatGroupRequest, int? timeOut = null, int tryCount = 0)
+        {
+            var url = String.Format(base.UrlChatGroupsUpdate,groupID);
+            var formData = (Dictionary<string, object>)updateChatGroupRequest.ToDictionary<object>(); 
+            var httpTimeOut = timeOut ?? base.ServerConfig.HttpTimeOut;
+            var result = Put.PutGetJson<ChatGroupResponseUpdate>(url, null, formData, null, null, httpTimeOut, base.ServerConfig.MaxJsonLength, base.ServerConfig.IsDebug, ContentType.JSON, base.HeaderDictionary);
+            if (result.StatusCode == HttpStatusCode.Unauthorized) /*token失效*/
+            {
+                TryToken();
+                tryCount = 2;//设置重置次数，并往下进行重试
+            }
+            if (result.StatusCode != HttpStatusCode.OK && tryCount > 0)
+            {
+                return this.ChatGroupUpdate(groupID,updateChatGroupRequest, timeOut, --tryCount);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 删除群组
+        /// </summary>
+        /// <param name="groupID">群组ID</param>
+        /// <param name="timeOut">默认null为ServerConfig的值</param>
+        /// <param name="tryCount">失败重试次数，默认为0</param>
+        public ChatGroupResponseDelete ChatGroupDelete(string groupID, int? timeOut = null, int tryCount = 0)
+        {
+            var url = String.Format(base.UrlChatGroupsDelete, groupID);
+            var httpTimeOut = timeOut ?? base.ServerConfig.HttpTimeOut;
+            var result = Delete.DeleteGetJson<ChatGroupResponseDelete>(url, null,null, null, null, httpTimeOut, base.ServerConfig.MaxJsonLength, base.ServerConfig.IsDebug, ContentType.JSON, base.HeaderDictionary);
+            if (result.StatusCode == HttpStatusCode.Unauthorized) /*token失效*/
+            {
+                TryToken();
+                tryCount = 2;//设置重置次数，并往下进行重试
+            }
+            if (result.StatusCode != HttpStatusCode.OK && tryCount > 0)
+            {
+                return this.ChatGroupDelete(groupID, timeOut, --tryCount);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 获取群组所有成员
+        /// </summary>
+        /// <param name="groupID">群组ID</param>
+        /// <param name="timeOut">默认null为ServerConfig的值</param>
+        /// <param name="tryCount">失败重试次数，默认为0</param>
+        public ChatGroupResponseMemberAll ChatGroupMemberAll(string groupID, int? timeOut = null, int tryCount = 0)
+        {
+            var url = String.Format(base.UrlChatGroupsMemberAll, groupID);
+            var httpTimeOut = timeOut ?? base.ServerConfig.HttpTimeOut;
+            var result = Get.GetJson<ChatGroupResponseMemberAll>(url, null, null, null, null, httpTimeOut, base.ServerConfig.MaxJsonLength, base.ServerConfig.IsDebug, base.HeaderDictionary);
+            if (result.StatusCode == HttpStatusCode.Unauthorized) /*token失效*/
+            {
+                TryToken();
+                tryCount = 2;//设置重置次数，并往下进行重试
+            }
+            if (result.StatusCode != HttpStatusCode.OK && tryCount > 0)
+            {
+                return this.ChatGroupMemberAll(groupID, timeOut, --tryCount);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 添加群组成员[单个]
+        /// </summary>
+        /// <param name="groupID">群组ID</param>
+        /// <param name="userName">环信ID</param>
+        /// <param name="timeOut">默认null为ServerConfig的值</param>
+        /// <param name="tryCount">失败重试次数，默认为0</param>
+        public ChatGroupResponseMemberAdd ChatGroupMemberAdd(string groupID,string userName, int? timeOut = null, int tryCount = 0)
+        {
+            var url = String.Format(base.UrlChatGroupsMemberAdd, groupID,userName);
+            var httpTimeOut = timeOut ?? base.ServerConfig.HttpTimeOut;
+            var result = Post.PostGetJson<ChatGroupResponseMemberAdd>(url, null, null, null, null, httpTimeOut, base.ServerConfig.MaxJsonLength, base.ServerConfig.IsDebug, ContentType.JSON, base.HeaderDictionary);
+            if (result.StatusCode == HttpStatusCode.Unauthorized) /*token失效*/
+            {
+                TryToken();
+                tryCount = 2;//设置重置次数，并往下进行重试
+            }
+            if (result.StatusCode != HttpStatusCode.OK && tryCount > 0)
+            {
+                return this.ChatGroupMemberAdd(groupID,userName, timeOut, --tryCount);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 添加群组成员[批量]添加群组成员[单个]
+        /// </summary>
+        /// <param name="groupID">群组ID</param>
+        /// <param name="userNames">环信IDs</param>
+        /// <param name="timeOut">默认null为ServerConfig的值</param>
+        /// <param name="tryCount">失败重试次数，默认为0</param>
+        public ChatGroupResponseMemberAddBatch ChatGroupMemberAddBatch(string groupID, string[] userNames, int? timeOut = null, int tryCount = 0)
+        {
+            var url = String.Format(base.UrlChatGroupsMemberAddBatch, groupID);
+            var formData = new Dictionary<string, object>() { {"usernames",userNames} }; 
+            var httpTimeOut = timeOut ?? base.ServerConfig.HttpTimeOut;
+            var result = Post.PostGetJson<ChatGroupResponseMemberAddBatch>(url, null, formData, null, null, httpTimeOut, base.ServerConfig.MaxJsonLength, base.ServerConfig.IsDebug, ContentType.JSON, base.HeaderDictionary);
+            if (result.StatusCode == HttpStatusCode.Unauthorized) /*token失效*/
+            {
+                TryToken();
+                tryCount = 2;//设置重置次数，并往下进行重试
+            }
+            if (result.StatusCode != HttpStatusCode.OK && tryCount > 0)
+            {
+                return this.ChatGroupMemberAddBatch(groupID, userNames, timeOut, --tryCount);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 移除群组成员[单个]
+        /// </summary>
+        /// <param name="groupID">群组ID</param>
+        /// <param name="userName">环信ID</param>
+        /// <param name="timeOut">默认null为ServerConfig的值</param>
+        /// <param name="tryCount">失败重试次数，默认为0</param>
+        public ChatGroupResponseMemberDelete ChatGroupMemberDelete(string groupID, string userName, int? timeOut = null, int tryCount = 0)
+        {
+            var url = String.Format(base.UrlChatGroupsMemberDelete, groupID,userName);
+            var httpTimeOut = timeOut ?? base.ServerConfig.HttpTimeOut;
+            var result = Delete.DeleteGetJson<ChatGroupResponseMemberDelete>(url, null, null, null, null, httpTimeOut, base.ServerConfig.MaxJsonLength, base.ServerConfig.IsDebug, ContentType.JSON, base.HeaderDictionary);
+            if (result.StatusCode == HttpStatusCode.Unauthorized) /*token失效*/
+            {
+                TryToken();
+                tryCount = 2;//设置重置次数，并往下进行重试
+            }
+            if (result.StatusCode != HttpStatusCode.OK && tryCount > 0)
+            {
+                return this.ChatGroupMemberDelete(groupID, userName, timeOut, --tryCount);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 移除群组成员[批量]
+        /// </summary>
+        /// <param name="groupID">群组ID</param>
+        /// <param name="userNames">环信IDs</param>
+        /// <param name="timeOut">默认null为ServerConfig的值</param>
+        /// <param name="tryCount">失败重试次数，默认为0</param>
+        public ChatGroupResponseMemberDeleteBatch ChatGroupMemberDeleteBatch(string groupID, string[] userNames, int? timeOut = null, int tryCount = 0)
+        {
+            var url = String.Format(base.UrlChatGroupsMemberDeleteBatch, groupID,string.Join(",",userNames));
+            var httpTimeOut = timeOut ?? base.ServerConfig.HttpTimeOut;
+            var result = Delete.DeleteGetJson<ChatGroupResponseMemberDeleteBatch>(url, null, null, null, null, httpTimeOut, base.ServerConfig.MaxJsonLength, base.ServerConfig.IsDebug, ContentType.JSON, base.HeaderDictionary);
+            if (result.StatusCode == HttpStatusCode.Unauthorized) /*token失效*/
+            {
+                TryToken();
+                tryCount = 2;//设置重置次数，并往下进行重试
+            }
+            if (result.StatusCode != HttpStatusCode.OK && tryCount > 0)
+            {
+                return this.ChatGroupMemberDeleteBatch(groupID, userNames, timeOut, --tryCount);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 获取一个用户参与的所有群组
+        /// </summary>
+        /// <param name="userName">环信ID</param>
+        /// <param name="timeOut">默认null为ServerConfig的值</param>
+        /// <param name="tryCount">失败重试次数，默认为0</param>
+        public ChatGroupResponseUser ChatGroupUser(string userName, int? timeOut = null, int tryCount = 0)
+        {
+            var url = String.Format(base.UrlChatGroupsUser, userName);
+            var httpTimeOut = timeOut ?? base.ServerConfig.HttpTimeOut;
+            var result = Get.GetJson<ChatGroupResponseUser>(url, null, null, null, null, httpTimeOut, base.ServerConfig.MaxJsonLength, base.ServerConfig.IsDebug, base.HeaderDictionary);
+            if (result.StatusCode == HttpStatusCode.Unauthorized) /*token失效*/
+            {
+                TryToken();
+                tryCount = 2;//设置重置次数，并往下进行重试
+            }
+            if (result.StatusCode != HttpStatusCode.OK && tryCount > 0)
+            {
+                return this.ChatGroupUser( userName, timeOut, --tryCount);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 转让群组
+        /// </summary>
+        /// <param name="groupID">群组ID</param>
+        /// <param name="newOwner">新群主环信ID</param>
+        /// <param name="timeOut">默认null为ServerConfig的值</param>
+        /// <param name="tryCount">失败重试次数，默认为0</param>
+        public ChatGroupResponseChange ChatGroupChange(string groupID,string newOwner, int? timeOut = null, int tryCount = 0)
+        {
+            var url = String.Format(base.UrlChatGroupsChange, groupID);
+            var formData = new Dictionary<string, object>() { { "newowner", newOwner } }; 
+            var httpTimeOut = timeOut ?? base.ServerConfig.HttpTimeOut;
+            var result = Put.PutGetJson<ChatGroupResponseChange>(url, null, formData, null, null, httpTimeOut, base.ServerConfig.MaxJsonLength, base.ServerConfig.IsDebug, ContentType.JSON, base.HeaderDictionary);
+            if (result.StatusCode == HttpStatusCode.Unauthorized) /*token失效*/
+            {
+                TryToken();
+                tryCount = 2;//设置重置次数，并往下进行重试
+            }
+            if (result.StatusCode != HttpStatusCode.OK && tryCount > 0)
+            {
+                return this.ChatGroupChange( groupID,newOwner, timeOut, --tryCount);
+            }
+            return result;
+        }
+        #endregion
+
+        #region 黑名单管理
+
+        /// <summary>
+        /// 查询群组黑名单
+        /// </summary>
+        /// <param name="groupID">群组ID</param>
+        /// <param name="timeOut">默认null为ServerConfig的值</param>
+        /// <param name="tryCount">失败重试次数，默认为0</param>
+        public ChatGroupResponseBlock ChatGroupBlock(string groupID, int? timeOut = null, int tryCount = 0)
+        {
+            var url = String.Format(base.UrlChatGroupsBlock, groupID);
+            var httpTimeOut = timeOut ?? base.ServerConfig.HttpTimeOut;
+            var result = Get.GetJson<ChatGroupResponseBlock>(url, null, null, null, null, httpTimeOut, base.ServerConfig.MaxJsonLength, base.ServerConfig.IsDebug, base.HeaderDictionary);
+            if (result.StatusCode == HttpStatusCode.Unauthorized) /*token失效*/
+            {
+                TryToken();
+                tryCount = 2;//设置重置次数，并往下进行重试
+            }
+            if (result.StatusCode != HttpStatusCode.OK && tryCount > 0)
+            {
+                return this.ChatGroupBlock(groupID, timeOut, --tryCount);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 添加用户至群组黑名单[单个]
+        /// </summary>
+        /// <param name="groupID">群组ID</param>
+        /// <param name="userName">环信ID</param>
+        /// <param name="timeOut">默认null为ServerConfig的值</param>
+        /// <param name="tryCount">失败重试次数，默认为0</param>
+        public ChatGroupResponseBlockAdd ChatGroupBlockAdd(string groupID, string userName, int? timeOut = null, int tryCount = 0)
+        {
+            var url = String.Format(base.UrlChatGroupsBlockAdd, groupID, userName);
+            var httpTimeOut = timeOut ?? base.ServerConfig.HttpTimeOut;
+            var result = Post.PostGetJson<ChatGroupResponseBlockAdd>(url, null, null, null, null, httpTimeOut, base.ServerConfig.MaxJsonLength, base.ServerConfig.IsDebug, ContentType.JSON, base.HeaderDictionary);
+            if (result.StatusCode == HttpStatusCode.Unauthorized) /*token失效*/
+            {
+                TryToken();
+                tryCount = 2;//设置重置次数，并往下进行重试
+            }
+            if (result.StatusCode != HttpStatusCode.OK && tryCount > 0)
+            {
+                return this.ChatGroupBlockAdd(groupID, userName, timeOut, --tryCount);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 添加用户至群组黑名单[批量]
+        /// </summary>
+        /// <param name="groupID">群组ID</param>
+        /// <param name="userNames">环信IDs</param>
+        /// <param name="timeOut">默认null为ServerConfig的值</param>
+        /// <param name="tryCount">失败重试次数，默认为0</param>
+        public ChatGroupResponseBlockAddBatch ChatGroupBlockAddBatch(string groupID, string[] userNames, int? timeOut = null, int tryCount = 0)
+        {
+            var url = String.Format(base.UrlChatGroupsBlockAddBatch, groupID);
+            var formData = new Dictionary<string, object>() { { "usernames", userNames } };
+            var httpTimeOut = timeOut ?? base.ServerConfig.HttpTimeOut;
+            var result = Post.PostGetJson<ChatGroupResponseBlockAddBatch>(url, null, formData, null, null, httpTimeOut, base.ServerConfig.MaxJsonLength, base.ServerConfig.IsDebug, ContentType.JSON, base.HeaderDictionary);
+            if (result.StatusCode == HttpStatusCode.Unauthorized) /*token失效*/
+            {
+                TryToken();
+                tryCount = 2;//设置重置次数，并往下进行重试
+            }
+            if (result.StatusCode != HttpStatusCode.OK && tryCount > 0)
+            {
+                return this.ChatGroupBlockAddBatch(groupID, userNames, timeOut, --tryCount);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 从群组黑名单移除用户[单个]
+        /// </summary>
+        /// <param name="groupID">群组ID</param>
+        /// <param name="userName">环信ID</param>
+        /// <param name="timeOut">默认null为ServerConfig的值</param>
+        /// <param name="tryCount">失败重试次数，默认为0</param>
+        public ChatGroupResponseBlockDelete ChatGroupBlockDelete(string groupID, string userName, int? timeOut = null, int tryCount = 0)
+        {
+            var url = String.Format(base.UrlChatGroupsBlockDelete, groupID, userName);
+            var httpTimeOut = timeOut ?? base.ServerConfig.HttpTimeOut;
+            var result = Delete.DeleteGetJson<ChatGroupResponseBlockDelete>(url, null, null, null, null, httpTimeOut, base.ServerConfig.MaxJsonLength, base.ServerConfig.IsDebug, ContentType.JSON, base.HeaderDictionary);
+            if (result.StatusCode == HttpStatusCode.Unauthorized) /*token失效*/
+            {
+                TryToken();
+                tryCount = 2;//设置重置次数，并往下进行重试
+            }
+            if (result.StatusCode != HttpStatusCode.OK && tryCount > 0)
+            {
+                return this.ChatGroupBlockDelete(groupID, userName, timeOut, --tryCount);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 从群组黑名单移除用户[批量]
+        /// </summary>
+        /// <param name="groupID">群组ID</param>
+        /// <param name="userNames">环信IDs</param>
+        /// <param name="timeOut">默认null为ServerConfig的值</param>
+        /// <param name="tryCount">失败重试次数，默认为0</param>
+        public ChatGroupResponseBlockDeleteBatch ChatGroupBlockDeleteBatch(string groupID, string[] userNames, int? timeOut = null, int tryCount = 0)
+        {
+            var url = String.Format(base.UrlChatGroupsBlockDeleteBatch, groupID, string.Join(",", userNames));
+            var httpTimeOut = timeOut ?? base.ServerConfig.HttpTimeOut;
+            var result = Delete.DeleteGetJson<ChatGroupResponseBlockDeleteBatch>(url, null, null, null, null, httpTimeOut, base.ServerConfig.MaxJsonLength, base.ServerConfig.IsDebug, ContentType.JSON, base.HeaderDictionary);
+            if (result.StatusCode == HttpStatusCode.Unauthorized) /*token失效*/
+            {
+                TryToken();
+                tryCount = 2;//设置重置次数，并往下进行重试
+            }
+            if (result.StatusCode != HttpStatusCode.OK && tryCount > 0)
+            {
+                return this.ChatGroupBlockDeleteBatch(groupID, userNames, timeOut, --tryCount);
+            }
+            return result;
+        }
+
+
+        #endregion
+
+        #endregion
+
+        #region 聊天室管理
+
+        #region 管理聊天室
+
+
+        /// <summary>
+        /// 创建聊天室
+        /// </summary>
+        /// <param name="createChatRoomRequest">请求实体</param>
+        /// <param name="timeOut">默认null为ServerConfig的值</param>
+        /// <param name="tryCount">失败重试次数，默认为0</param>
+        public ChatRoomResponseCreate ChatRoomCreate(CreateChatRoomRequest createChatRoomRequest, int? timeOut = null, int tryCount = 0)
+        {
+            var url = base.UrlChatRoomsCreate;
+            var formData = (Dictionary<string, object>)createChatRoomRequest.ToDictionary<object>();
+            var httpTimeOut = timeOut ?? base.ServerConfig.HttpTimeOut;
+            var result = Post.PostGetJson<ChatRoomResponseCreate>(url, null, formData, null, null, httpTimeOut, base.ServerConfig.MaxJsonLength, base.ServerConfig.IsDebug, ContentType.JSON, base.HeaderDictionary);
+            if (result.StatusCode == HttpStatusCode.Unauthorized) /*token失效*/
+            {
+                TryToken();
+                tryCount = 2;//设置重置次数，并往下进行重试
+            }
+            if (result.StatusCode != HttpStatusCode.OK && tryCount > 0)
+            {
+                return this.ChatRoomCreate(createChatRoomRequest, timeOut, --tryCount);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 修改聊天室信息
+        /// </summary>
+        /// <param name="roomID">聊天室ID</param>
+        /// <param name="updateChatRoomRequest">请求实体</param>
+        /// <param name="timeOut">默认null为ServerConfig的值</param>
+        /// <param name="tryCount">失败重试次数，默认为0</param>
+        public ChatRoomResponseUpdate ChatRoomUpdate(string roomID, UpdateChatRoomRequest updateChatRoomRequest, int? timeOut = null, int tryCount = 0)
+        {
+            var url = String.Format(base.UrlChatRoomsUpdate, roomID);
+            var formData = (Dictionary<string, object>)updateChatRoomRequest.ToDictionary<object>();
+            var httpTimeOut = timeOut ?? base.ServerConfig.HttpTimeOut;
+            var result = Put.PutGetJson<ChatRoomResponseUpdate>(url, null, formData, null, null, httpTimeOut, base.ServerConfig.MaxJsonLength, base.ServerConfig.IsDebug, ContentType.JSON, base.HeaderDictionary);
+            if (result.StatusCode == HttpStatusCode.Unauthorized) /*token失效*/
+            {
+                TryToken();
+                tryCount = 2;//设置重置次数，并往下进行重试
+            }
+            if (result.StatusCode != HttpStatusCode.OK && tryCount > 0)
+            {
+                return this.ChatRoomUpdate(roomID, updateChatRoomRequest, timeOut, --tryCount);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 删除聊天室
+        /// </summary>
+        /// <param name="roomID">聊天室ID</param>
+        /// <param name="timeOut">默认null为ServerConfig的值</param>
+        /// <param name="tryCount">失败重试次数，默认为0</param>
+        public ChatRoomResponseDelete ChatRoomDelete(string roomID, int? timeOut = null, int tryCount = 0)
+        {
+            var url = String.Format(base.UrlChatRoomsDelete, roomID);
+            var httpTimeOut = timeOut ?? base.ServerConfig.HttpTimeOut;
+            var result = Delete.DeleteGetJson<ChatRoomResponseDelete>(url, null, null, null, null, httpTimeOut, base.ServerConfig.MaxJsonLength, base.ServerConfig.IsDebug, ContentType.JSON, base.HeaderDictionary);
+            if (result.StatusCode == HttpStatusCode.Unauthorized) /*token失效*/
+            {
+                TryToken();
+                tryCount = 2;//设置重置次数，并往下进行重试
+            }
+            if (result.StatusCode != HttpStatusCode.OK && tryCount > 0)
+            {
+                return this.ChatRoomDelete(roomID, timeOut, --tryCount);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 获取 APP 中所有的聊天室
+        /// </summary>
+        /// <param name="timeOut">默认null为ServerConfig的值</param>
+        /// <param name="tryCount">失败重试次数，默认为0</param>
+        public ChatRoomResponse ChatRoomGet(int? timeOut = null, int tryCount = 0)
+        {
+            var url = string.Format(base.UrlChatRoomsGet);
+            var httpTimeOut = timeOut ?? base.ServerConfig.HttpTimeOut;
+            var result = Get.GetJson<ChatRoomResponse>(url, null, null, null, null, httpTimeOut, base.ServerConfig.MaxJsonLength, base.ServerConfig.IsDebug, base.HeaderDictionary);
+            if (result.StatusCode == HttpStatusCode.Unauthorized) /*token失效*/
+            {
+                TryToken();
+                tryCount = 2;//设置重置次数，并往下进行重试
+            }
+            if (result.StatusCode != HttpStatusCode.OK && tryCount > 0)
+            {
+                return this.ChatRoomGet(timeOut, --tryCount);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 获取一个聊天室详情
+        /// </summary>
+        /// <param name="roomID">聊天室ID</param>
+        /// <param name="timeOut">默认null为ServerConfig的值</param>
+        /// <param name="tryCount">失败重试次数，默认为0</param>
+        public ChatRoomResponse ChatRoomDetails(string roomID, int? timeOut = null, int tryCount = 0)
+        {
+            var url = string.Format(base.UrlChatRoomsDetails, roomID);
+            var httpTimeOut = timeOut ?? base.ServerConfig.HttpTimeOut;
+            var result = Get.GetJson<ChatRoomResponse>(url, null, null, null, null, httpTimeOut, base.ServerConfig.MaxJsonLength, base.ServerConfig.IsDebug, base.HeaderDictionary);
+            if (result.StatusCode == HttpStatusCode.Unauthorized) /*token失效*/
+            {
+                TryToken();
+                tryCount = 2;//设置重置次数，并往下进行重试
+            }
+            if (result.StatusCode != HttpStatusCode.OK && tryCount > 0)
+            {
+                return this.ChatRoomDetails(roomID, timeOut, --tryCount);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 获取用户加入的聊天室
+        /// </summary>
+        /// <param name="userName">环信ID</param>
+        /// <param name="timeOut">默认null为ServerConfig的值</param>
+        /// <param name="tryCount">失败重试次数，默认为0</param>
+        public ChatRoomResponseJoined ChatRoomUser(string userName, int? timeOut = null, int tryCount = 0)
+        {
+            var url = String.Format(base.UrlChatRoomsUserJoin, userName);
+            var httpTimeOut = timeOut ?? base.ServerConfig.HttpTimeOut;
+            var result = Get.GetJson<ChatRoomResponseJoined>(url, null, null, null, null, httpTimeOut, base.ServerConfig.MaxJsonLength, base.ServerConfig.IsDebug, base.HeaderDictionary);
+            if (result.StatusCode == HttpStatusCode.Unauthorized) /*token失效*/
+            {
+                TryToken();
+                tryCount = 2;//设置重置次数，并往下进行重试
+            }
+            if (result.StatusCode != HttpStatusCode.OK && tryCount > 0)
+            {
+                return this.ChatRoomUser(userName, timeOut, --tryCount);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 添加聊天室成员[单个]
+        /// </summary>
+        /// <param name="roomID">聊天室ID</param>
+        /// <param name="userName">环信ID</param>
+        /// <param name="timeOut">默认null为ServerConfig的值</param>
+        /// <param name="tryCount">失败重试次数，默认为0</param>
+        public ChatRoomResponseMemberAdd ChatRoomMemberAdd(string roomID, string userName, int? timeOut = null, int tryCount = 0)
+        {
+            var url = String.Format(base.UrlChatRoomsUserAdd, roomID, userName);
+            var httpTimeOut = timeOut ?? base.ServerConfig.HttpTimeOut;
+            var result = Post.PostGetJson<ChatRoomResponseMemberAdd>(url, null, null, null, null, httpTimeOut, base.ServerConfig.MaxJsonLength, base.ServerConfig.IsDebug, ContentType.JSON, base.HeaderDictionary);
+            if (result.StatusCode == HttpStatusCode.Unauthorized) /*token失效*/
+            {
+                TryToken();
+                tryCount = 2;//设置重置次数，并往下进行重试
+            }
+            if (result.StatusCode != HttpStatusCode.OK && tryCount > 0)
+            {
+                return this.ChatRoomMemberAdd(roomID, userName, timeOut, --tryCount);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 添加聊天室成员[批量]
+        /// </summary>
+        /// <param name="roomID">聊天室ID</param>
+        /// <param name="userNames">环信IDs</param>
+        /// <param name="timeOut">默认null为ServerConfig的值</param>
+        /// <param name="tryCount">失败重试次数，默认为0</param>
+        public ChatRoomResponseMemberAddBatch ChatRoomMemberAddBatch(string roomID, string[] userNames, int? timeOut = null, int tryCount = 0)
+        {
+            var url = String.Format(base.UrlChatRoomsUserBatchAdd, roomID);
+            var formData = new Dictionary<string, object>() { { "usernames", userNames } };
+            var httpTimeOut = timeOut ?? base.ServerConfig.HttpTimeOut;
+            var result = Post.PostGetJson<ChatRoomResponseMemberAddBatch>(url, null, formData, null, null, httpTimeOut, base.ServerConfig.MaxJsonLength, base.ServerConfig.IsDebug, ContentType.JSON, base.HeaderDictionary);
+            if (result.StatusCode == HttpStatusCode.Unauthorized) /*token失效*/
+            {
+                TryToken();
+                tryCount = 2;//设置重置次数，并往下进行重试
+            }
+            if (result.StatusCode != HttpStatusCode.OK && tryCount > 0)
+            {
+                return this.ChatRoomMemberAddBatch(roomID, userNames, timeOut, --tryCount);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 删除聊天室成员[单个]
+        /// </summary>
+        /// <param name="roomID">聊天室ID</param>
+        /// <param name="userName">环信ID</param>
+        /// <param name="timeOut">默认null为ServerConfig的值</param>
+        /// <param name="tryCount">失败重试次数，默认为0</param>
+        public ChatRoomResponseMemberDelete ChatRoomMemberDelete(string roomID, string userName, int? timeOut = null, int tryCount = 0)
+        {
+            var url = String.Format(base.UrlChatRoomsUserDelete, roomID, userName);
+            var httpTimeOut = timeOut ?? base.ServerConfig.HttpTimeOut;
+            var result = Delete.DeleteGetJson<ChatRoomResponseMemberDelete>(url, null, null, null, null, httpTimeOut, base.ServerConfig.MaxJsonLength, base.ServerConfig.IsDebug, ContentType.JSON, base.HeaderDictionary);
+            if (result.StatusCode == HttpStatusCode.Unauthorized) /*token失效*/
+            {
+                TryToken();
+                tryCount = 2;//设置重置次数，并往下进行重试
+            }
+            if (result.StatusCode != HttpStatusCode.OK && tryCount > 0)
+            {
+                return this.ChatRoomMemberDelete(roomID, userName, timeOut, --tryCount);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 删除聊天室成员[批量]
+        /// </summary>
+        /// <param name="roomID">聊天室ID</param>
+        /// <param name="userNames">环信IDs</param>
+        /// <param name="timeOut">默认null为ServerConfig的值</param>
+        /// <param name="tryCount">失败重试次数，默认为0</param>
+        public ChatRoomResponseMemberDeleteBatch ChatRoomMemberDeleteBatch(string roomID, string[] userNames, int? timeOut = null, int tryCount = 0)
+        {
+            var url = String.Format(base.UrlChatRoomsUserBatchDelete, roomID, string.Join(",", userNames));
+            var httpTimeOut = timeOut ?? base.ServerConfig.HttpTimeOut;
+            var result = Delete.DeleteGetJson<ChatRoomResponseMemberDeleteBatch>(url, null, null, null, null, httpTimeOut, base.ServerConfig.MaxJsonLength, base.ServerConfig.IsDebug, ContentType.JSON, base.HeaderDictionary);
+            if (result.StatusCode == HttpStatusCode.Unauthorized) /*token失效*/
+            {
+                TryToken();
+                tryCount = 2;//设置重置次数，并往下进行重试
+            }
+            if (result.StatusCode != HttpStatusCode.OK && tryCount > 0)
+            {
+                return this.ChatRoomMemberDeleteBatch(roomID, userNames, timeOut, --tryCount);
+            }
+            return result;
+        }
+
+        #endregion
+
+        #endregion
     }
 }
