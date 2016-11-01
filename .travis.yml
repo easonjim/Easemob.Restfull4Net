@@ -1,2 +1,2 @@
 language: csharp
-solution: Easemob.sln
+solution: Easemob.Restfull4Net/Easemob.Restfull4Net.csproj
