@@ -1,2 +1,3 @@
-build_script:
- - CMD:NAnt -buildfile:NAnt.build Easemob.Restfull4Net_BuildOut_Debug
+configuration: Release
+build:
+  project: Easemob.sln
