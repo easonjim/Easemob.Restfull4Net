@@ -1,3 +1,7 @@
+version: {build}
 configuration: Release
 build:
   project: Easemob.sln
+  verbosity: minimal
+nuget:
+  disable_publish_on_pr: true

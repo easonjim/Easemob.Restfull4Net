@@ -1,5 +1,6 @@
-## Travis-CI Status:[![Build Status](https://travis-ci.org/easonjim/Easemob.Restfull4Net.svg?branch=master)](https://travis-ci.org/easonjim/Easemob.Restfull4Net)
-# Easemob.Restfull4Net
+## Travis-CI Status:[![Build Status](https://travis-ci.org/easonjim/Easemob.Restfull4Net.svg?branch=master)](https://travis-ci.org/easonjim/Easemob.Restfull4Net)  
+##AppVeyor-CI Status:[![Build status](https://ci.appveyor.com/api/projects/status/7kspjnaof7ey5r48/branch/master?svg=true)](https://ci.appveyor.com/project/easonjim/easemob-restfull4net/branch/master)  
+# Easemob.Restfull4Net  
 环信Restfull API dotnet的封装  
 支持的.Net Framework版本：4.0   
 环信Restfull API地址：[http://docs.easemob.com/start/100serverintegration](http://docs.easemob.com/start/100serverintegration)  
