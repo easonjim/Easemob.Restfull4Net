@@ -1,2 +1,4 @@
 language: csharp
 solution: Easemob.sln
+script:    
+  - NAnt -buildfile:NAnt.build Easemob.Restfull4Net_BuildOut_Debug
