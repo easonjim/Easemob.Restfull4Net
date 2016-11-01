@@ -1,4 +1,4 @@
-version: {build}
+version: AppVeyor-{build}
 configuration: Release
 build:
   project: Easemob.sln
