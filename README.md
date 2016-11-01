@@ -1,3 +1,4 @@
+## Travis-CI Status:[![Build Status](https://travis-ci.org/easonjim/Easemob.Restfull4Net.svg?branch=master)](https://travis-ci.org/easonjim/Easemob.Restfull4Net)
 # Easemob.Restfull4Net
 环信Restfull API dotnet的封装  
 支持的.Net Framework版本：4.0   
