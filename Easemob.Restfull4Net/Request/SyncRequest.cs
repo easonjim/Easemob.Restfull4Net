@@ -1267,11 +1267,11 @@ namespace Easemob.Restfull4Net.Request
         /// <param name="roomID">聊天室ID</param>
         /// <param name="timeOut">默认null为ServerConfig的值</param>
         /// <param name="tryCount">失败重试次数，默认为0</param>
-        public ChatRoomResponse ChatRoomDetails(string roomID, int? timeOut = null, int tryCount = 0)
+        public ChatRoomResponseDetail ChatRoomDetails(string roomID, int? timeOut = null, int tryCount = 0)
         {
             var url = string.Format(base.UrlChatRoomsDetails, roomID);
             var httpTimeOut = timeOut ?? base.ServerConfig.HttpTimeOut;
-            var result = Get.GetJson<ChatRoomResponse>(url, null, null, null, null, httpTimeOut, base.ServerConfig.MaxJsonLength, base.ServerConfig.IsDebug, base.HeaderDictionary);
+            var result = Get.GetJson<ChatRoomResponseDetail>(url, null, null, null, null, httpTimeOut, base.ServerConfig.MaxJsonLength, base.ServerConfig.IsDebug, base.HeaderDictionary);
             if (result.StatusCode == HttpStatusCode.Unauthorized) /*token失效*/
             {
                 TryToken();
